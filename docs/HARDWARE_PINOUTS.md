@@ -52,17 +52,17 @@ Si se conecta un módulo transceptor LoRa UART directo (o microcontrolador RNode
 
 ---
 
-## 3. Conexión del Módulo Sensor de Batería Solar INA219 (I2C)
+## 3. Conexión de Sensores I2C (Batería INA219 y Barómetro BME280)
 
-El sensor **INA219** permite medir con alta precisión el voltaje real (0 a 26V DC) y la corriente de la batería solar o banco de 12V/LiFePO4, publicando los datos en la telemetría pública de NomadNet.
+Los sensores **INA219** (monitor de batería solar) y **BME280/BMP280** (presión barométrica y clima) funcionan simultáneamente conectados **en paralelo al mismo bus I2C** del microcomputador.
 
 <p align="center">
-  <img src="img/ina219_wiring.jpg" alt="Diagrama de Conexión Sensor INA219 y Batería Solar" width="850" style="max-width:100%; border-radius:8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+  <img src="img/i2c_sensors_wiring.jpg" alt="Diagrama de Conexión de Sensores I2C en Paralelo, Batería Solar y SBC" width="850" style="max-width:100%; border-radius:8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
   <br>
-  <em>Diagrama de conexión: Batería Solar 12V, Sensor INA219, Regulador Step-Down 5V, MicroPC SBC y Radio LoRa RNode.</em>
+  <em>Diagrama de conexión completo: Batería Solar 12V, Sensor de Batería INA219, Sensor Ambiental BME280/BMP280 en paralelo I2C, Regulador Step-Down 5V, MicroPC SBC y Radio LoRa RNode.</em>
 </p>
 
-### A. Pines Lógicos I2C (Hacia el SBC)
+### A. Pines Lógicos I2C (Hacia el SBC para INA219 y BME280)
 
 Conecta los 4 pines de control del módulo INA219 a los pines GPIO de tu microcomputador:
 

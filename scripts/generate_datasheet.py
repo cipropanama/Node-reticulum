@@ -88,7 +88,9 @@ def generate_datasheet():
 3. ALIMENTACIÓN Y SENSORES:
    • MicroPC (SBC):  {stats['model']} ({stats['arch']})
    • Alimentación:   12V LiFePO4 / Solar -> Step-Down a 5.1V
-   • Sensor Batería: INA219 en Bus I2C (Pines SDA:3, SCL:5, 3.3V:1, GND:6)
+   • Bus I2C Compartido: Pines SDA:3, SCL:5, 3.3V:1, GND:6
+   • Sensor Batería: INA219 (Dir 0x40)
+   • Sensor Clima:   BME280 / BMP280 (Dir 0x76/0x77)
    • Enlace Hub:     rns.cipropanama.org:4242
 
 4. GUÍA RÁPIDA PARA RESCATISTAS Y BRIGADISTAS EN CAMPO:
@@ -225,7 +227,7 @@ Fecha de Generación de Ficha: {now_str}
       <ul>
         <li><strong>SBC (Placa):</strong> {stats['model']} ({stats['arch']})</li>
         <li><strong>Alimentación:</strong> Batería LiFePO4 12V / Panel Solar</li>
-        <li><strong>Sensor Batería:</strong> INA219 (I2C SDA:Pin 3, SCL:Pin 5, 3.3V)</li>
+        <li><strong>Sensores I2C:</strong> INA219 (Batería) + BME280 (Clima/Barómetro) en SDA:Pin 3, SCL:Pin 5</li>
         <li><strong>Servidor Central:</strong> rns.cipropanama.org (Puerto 4242)</li>
       </ul>
     </div>
