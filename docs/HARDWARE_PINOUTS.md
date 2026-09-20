@@ -187,8 +187,9 @@ Para nodos móviles o vehiculares, se puede conectar un receptor GPS (u-blox NEO
 ## 6. Recomendaciones de Energía para Despliegues Remotos
 
 1. **Protección contra bajadas de tensión (Brownout):** Los transmisores LoRa pueden tener picos de consumo durante la transmisión. Coloque un condensador electrolítico de `100uF - 470uF` entre VCC y GND del transceptor si observa reinicios espontáneos.
-2. **Sistema de Respaldo Solar:** Panel solar de 20W - 50W con controlador MPPT y batería LiFePO4 de 12V con conversor reductor (Step-down) de alta eficiencia a 5.1V.
-3. **Watchdog de Hardware:** El instalador configura el script `watchdog.py` que monitorea periódicamente la estabilidad del sistema y los daemons para evitar cuelgues desatendidos.
+2. **Sistema de Respaldo Solar:** Panel solar de 20W - 30W con controlador PWM/MPPT y batería LiFePO4 de 12V con conversor reductor (Step-down) de alta eficiencia ajustado a 5.15V.
+3. **Guía de Dimensionamiento:** Para tablas completas de consumo por SBC, horas de sol pico (HSP), comparativas de baterías y kits recomendados, consulta la [Guía de Dimensionamiento Energético y Solar](DIMENSIONAMIENTO_SOLAR_ENERGIA.md).
+4. **Watchdog de Hardware:** El instalador configura el script `watchdog.py` que monitorea periódicamente la estabilidad del sistema y los daemons para evitar cuelgues desatendidos.
 
 ---
 

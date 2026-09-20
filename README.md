@@ -122,7 +122,9 @@ Te aparecerá un menú directo con las siguientes opciones:
 | **Módem Packet** | TNC KISS por USB / Serie | Compatible con equipos VHF/UHF de radioaficionados |
 | **Alimentación** | Fuente 5V 2A o sistema solar 12V con conversor Step-Down | Para evitar micro-cortes en transmisión LoRa |
 
-> 📖 Consulta diagramas de pines, UART y conexión en paralelo de los sensores I2C en la [Guía de Hardware y Pinouts](docs/HARDWARE_PINOUTS.md).
+> 📖 **Documentación Técnica de Hardware:**
+> - [Guía de Conexión de Hardware y Pinouts (SBC a RNode y Sensores I2C)](docs/HARDWARE_PINOUTS.md)
+> - [Guía de Dimensionamiento Solar, Consumo por SBC y Autonomía de Baterías](docs/DIMENSIONAMIENTO_SOLAR_ENERGIA.md)
 
 ---
 
