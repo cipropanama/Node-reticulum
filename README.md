@@ -101,10 +101,11 @@ Te aparecerá un menú directo con las siguientes opciones:
 | :--- | :--- | :--- |
 | **SBC (Cerebro)** | Raspberry Pi Zero W / Zero 2W, Orange Pi Zero / Zero 3, MangoPi MQ-Pro (RISC-V) | Bajo consumo (1W a 3W), ideal para batería o panel solar |
 | **Radio LoRa (RNode)** | LilyGO T-Beam, T-Echo, Heltec LoRa32 v3, RNode DIY (SX1262 / SX1276) | Conexión directa por cable USB o por pines GPIO UART |
+| **Sensor de Batería** | Módulo INA219 (I2C) | Medición de 0-26V de batería solar/LiFePO4 |
 | **Módem Packet** | TNC KISS por USB / Serie | Compatible con equipos VHF/UHF de radioaficionados |
 | **Alimentación** | Fuente 5V 2A o sistema solar 12V con conversor Step-Down | Para evitar micro-cortes en transmisión LoRa |
 
-> 📖 Consulta diagramas de pines y conexiones en la [Guía de Hardware y Pinouts](docs/HARDWARE_PINOUTS.md).
+> 📖 Consulta diagramas de pines, UART y conexión del sensor INA219 en la [Guía de Hardware y Pinouts](docs/HARDWARE_PINOUTS.md).
 
 ---
 
