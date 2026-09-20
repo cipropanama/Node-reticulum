@@ -94,6 +94,17 @@ Te aparecerá un menú directo con las siguientes opciones:
 
 ---
 
+## 🌐 Ecosistema de Proyectos CIPRO Panamá
+
+CIPRO impulsa un conjunto de herramientas libres y complementarias sobre Reticulum para crear redes de comunicación de emergencia robustas:
+
+- 📡 **[Node-reticulum](https://github.com/cipropanama/Node-reticulum)** — Auto-instalador y gestor de nodos de emergencia para SBCs con Store & Forward y NomadNet.
+- 📧 **[SMTP-Reticulum](https://github.com/cipropanama/SMTP-Reticulum)** — Pasarela de correo táctico sobre Reticulum con salida a Internet (SMTP/IMAP).
+- 📊 **[MQTT-Reticulum](https://github.com/cipropanama/MQTT-Reticulum)** — Pasarela y transporte de telemetría / IoT sobre Reticulum.
+- 📻 **[APRS-Reticulum](https://github.com/cipropanama/APRS-Reticulum)** — Integración y pasarela de tramas APRS de radioaficionados sobre Reticulum.
+
+---
+
 ## 🤝 Comunidad y Licencia
 
 Este proyecto está liberado bajo la licencia **MIT**. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
@@ -104,7 +115,7 @@ Si este desarrollo te ha sido útil, te invitamos a mantener el reconocimiento y
 
 - 🌐 **Sitio Web:** [www.cipropanama.org](https://www.cipropanama.org/)
 - ✉️ **Correo Electrónico:** [info@cipropanama.org](mailto:info@cipropanama.org)
-- 📦 **Proyecto hermano:** [SMTP-Reticulum](https://github.com/cipropanama/SMTP-Reticulum)
+- 🐙 **GitHub:** [github.com/cipropanama](https://github.com/cipropanama)
 
 > **CIPRO Panamá** — _Tecnología para ayudar._  
 > Desarrollado con ❤️ para las telecomunicaciones libres.
