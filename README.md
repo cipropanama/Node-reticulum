@@ -58,6 +58,13 @@ El instalador detecta automáticamente el hardware (ARMv6, ARMv7, ARM64 o RISC-V
 1. **Repetidor de Malla (Transport Router):** Extiende el alcance de la red retransmitiendo paquetes cifrados entre otros usuarios de la zona sin necesidad de internet.
 2. **Buzón en Diferido (*Store-and-Forward* LXMF):** Si envías un mensaje a alguien que tiene su radio apagada o está fuera de cobertura, este nodo lo guarda de forma segura en su memoria y se lo entrega automáticamente apenas el destinatario vuelva a aparecer en la malla.
 3. **Página Microweb en NomadNet:** El nodo publica en la red una página local accesible desde NomadNet/Sideband donde muestra el nombre del nodo, estado de la CPU, temperatura, memoria, tiempo encendido, canales de auxilio y enlaces oficiales de **[Cipropanama.org](https://www.cipropanama.org)**.
+
+<p align="center">
+  <img src="docs/img/nomadnet_preview.jpg" alt="Simulación de Pantalla NomadNet" width="820" style="max-width:100%; border-radius:8px;">
+  <br>
+  <em>Vista de la página del Nodo de Emergencia visualizada desde el navegador Microweb de NomadNet.</em>
+</p>
+
 4. **Perro Guardián (*Watchdog*):** Los nodos en sitios remotos no pueden irse a reiniciar a mano. Un script en segundo plano supervisa que los servicios sigan vivos, limpia la memoria RAM si se satura, vigila que el módem USB no se desconecte por bajas de voltaje y hace un reinicio preventivo si ocurre un bloqueo severo.
 
 ---
