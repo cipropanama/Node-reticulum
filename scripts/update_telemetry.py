@@ -96,6 +96,12 @@ def update_pages():
         bat = battery_monitor.get_battery_status()
     except Exception:
         bat = {"status_str": "N/D"}
+
+    try:
+        import environmental_sensor
+        env = environmental_sensor.get_environmental_status()
+    except Exception:
+        env = {"status_str": "No instalado"}
     
     out_dir = cfg.get("nomadnet_pages_dir", "/var/nomadnet/pages")
     try:
@@ -128,6 +134,7 @@ def update_pages():
         "{RAM_PERCENT}": f"{stats['ram_percent']}%",
         "{UPTIME}": stats["uptime"],
         "{BATTERY_STATUS}": bat["status_str"],
+        "{BARO_STATUS}": env["status_str"],
         "{ACTIVE_INTERFACES}": active_interfaces,
         "{LAST_TELEMETRY_UPDATE}": now_str,
         "{LORA_FREQ}": str(cfg.get("lora_freq", "915.0")),
