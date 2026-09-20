@@ -1,6 +1,7 @@
 # Guía de Acceso Remoto y Gestión en Sitios de Difícil Acceso
 
-**Auspiciado por [Cipropanama.org](https://cipropanama.org)**
+**CIPRO Panamá — Tecnología para ayudar**  
+[www.cipropanama.org](https://www.cipropanama.org/)
 
 ---
 
@@ -50,3 +51,19 @@ Para nodos ubicados en cerros, torres o refugios remotos:
 - Si detecta que `rnsd` o `nomadnet` fallaron, los reinicia automáticamente.
 - Si la memoria RAM se satura, ejecuta liberación de cachés (`sync && drop_caches`).
 - Si se alcanza un número de 5 fallos críticos consecutivos irrecuperables, ejecuta un reinicio controlado del sistema (`systemctl reboot`) para restablecer los buses serie/USB y el subsistema de red.
+
+---
+
+## 🤝 Comunidad y Licencia
+
+Este proyecto está liberado bajo la licencia **MIT**. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
+
+Si este desarrollo te ha sido útil, te invitamos a mantener el reconocimiento y el enlace hacia el proyecto original.
+
+### Contacto CIPRO Panamá
+
+- 🌐 **Sitio Web:** [www.cipropanama.org](https://www.cipropanama.org/)
+- ✉️ **Correo Electrónico:** [info@cipropanama.org](mailto:info@cipropanama.org)
+
+> **CIPRO Panamá** — _Tecnología para ayudar._  
+> Desarrollado con ❤️ para las telecomunicaciones libres.

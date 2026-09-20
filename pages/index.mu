@@ -1,7 +1,7 @@
 # == NODO DE EMERGENCIA RETICULUM ==
 `!C`_Red de Comunicaciones de Emergencia y Resiliencia Comunitaria_`!c`
-`!C`*Auspiciado y Sostenido por Cipropanama.org*`!c`
-`!C`[https://cipropanama.org](https://cipropanama.org)`!c`
+`!C`*CIPRO Panamá — Tecnología para ayudar*`!c`
+`!C`[www.cipropanama.org](https://www.cipropanama.org/)`!c`
 
 --------------------------------------------------------------------------------
 
@@ -25,10 +25,10 @@
 
 `!F2a5`### 🛠️ SERVICIOS DISPONIBLES`!f`
 `[📨 Mensajería de Emergencia y Buzón LXMF]`(emergency.mu)
-`[ℹ️ Acerca de la Red y Cipropanama.org]`(about.mu)
+`[ℹ️ Acerca de la Red y CIPRO Panamá]`(about.mu)
 `[🔄 Actualizar Estado del Nodo]`(index.mu)
 
 --------------------------------------------------------------------------------
 
 `!F999`> _"La comunicación en momentos críticos es un derecho y una necesidad vital. Este nodo opera de manera autónoma sin depender de infraestructura centralizada de internet."_`!f`
-`!C`© Red de Nodos de Emergencia | CIPROPANAMA`!c`
+`!C`CIPRO Panamá - Desarrollado con ❤️ para las telecomunicaciones libres.`!c`

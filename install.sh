@@ -26,9 +26,8 @@ banner() {
     echo -e "${CYAN}${BOLD}"
     echo "╔════════════════════════════════════════════════════════════════════════════╗"
     echo "║       🌐 INSTALADOR AUTOMÁTICO DE NODO DE EMERGENCIA RETICULUM             ║"
-    echo "║                   Red de Resiliencia Comunitaria                           ║"
-    echo "║                      Auspiciado por Cipropanama.org                        ║"
-    echo "║                        https://cipropanama.org                             ║"
+    echo "║                 CIPRO Panamá — Tecnología para ayudar                      ║"
+    echo "║                       www.cipropanama.org                                  ║"
     echo "╚════════════════════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }
@@ -202,7 +201,7 @@ main() {
 
     echo -e "\n${GREEN}${BOLD}════════════════════════════════════════════════════════════════════════════${NC}"
     echo -e "${GREEN}${BOLD} ¡INSTALACIÓN BASE COMPLETADA CON ÉXITO!${NC}"
-    echo -e "${GREEN}${BOLD} Auspiciado por Cipropanama.org - https://cipropanama.org${NC}"
+    echo -e "${GREEN}${BOLD} CIPRO Panamá — Tecnología para ayudar (www.cipropanama.org)${NC}"
     echo -e "${GREEN}${BOLD}════════════════════════════════════════════════════════════════════════════${NC}"
     
     if [ "$1" == "--non-interactive" ] || [ "$1" == "--update" ]; then

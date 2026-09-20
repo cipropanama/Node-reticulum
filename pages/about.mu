@@ -1,25 +1,28 @@
-# == ACERCA DE LA RED Y CIPROPANAMA ==
+# == ACERCA DE LA RED Y CIPRO PANAMÁ ==
 `!C`_Innovación, Resiliencia y Telecomunicaciones Libres_`!c`
 `!C`[Volver a la Portada](index.mu)`!c`
 
 --------------------------------------------------------------------------------
 
-`!F03a`### 🌐 SOBRE CIPROPANAMA.ORG`!f`
-**Cipropanama** es una organización sin fines de lucro comprometida con el desarrollo comunitario, la innovación tecnológica y la soberanía en telecomunicaciones de emergencia en Panamá y la región.
+`!F03a`### 🌐 SOBRE CIPRO PANAMÁ`!f`
+**CIPRO Panamá** es una organización comprometida con el desarrollo comunitario, la innovación tecnológica y la respuesta a emergencias.
 
-- *Sitio Web Oficial:* [https://cipropanama.org](https://cipropanama.org)
-- *Objetivo:* Desarrollar e implementar redes de comunicación descentralizadas, abiertas, resistentes a catástrofes naturales y colapsos de infraestructura pública.
+- *Sitio Web:* [www.cipropanama.org](https://www.cipropanama.org/)
+- *Correo Electrónico:* `info@cipropanama.org`
+- *Misión:* Desarrollar e implementar redes de comunicación descentralizadas, abiertas y resistentes a catástrofes naturales.
 
 --------------------------------------------------------------------------------
 
 `!F28b`### 📡 SOBRE RETICULUM NETWORK STACK (RNS)`!f`
-Reticulum es un conjunto de protocolos de red sin infraestructura diseñado para construir redes totalmente encriptadas, descentralizadas y anónimas sobre cualquier medio físico:
-- Radio LoRa (RNodes)
-- Radioaficionados (VHF/UHF Packet Radio / TNC)
-- Wi-Fi / Ethernet local
-- Enlaces satelitales y túneles TCP/UDP
+Reticulum es un conjunto de protocolos de red sin infraestructura diseñado para construir redes totalmente encriptadas, descentralizadas y anónimas sobre cualquier medio físico (LoRa, Packet Radio VHF/UHF, WiFi, Ethernet o Internet).
 
-Este nodo forma parte de la malla de emergencia regional.
+--------------------------------------------------------------------------------
+
+`!F2a5`### 🤝 COMUNIDAD Y LICENCIA`!f`
+Este proyecto está liberado bajo la licencia MIT. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
+
+`!C`*CIPRO Panamá — Tecnología para ayudar.*`!c`
+`!C`_Desarrollado con ❤️ para las telecomunicaciones libres._`!c`
 
 --------------------------------------------------------------------------------
 `!C`[← Volver al Inicio](index.mu)`!c`

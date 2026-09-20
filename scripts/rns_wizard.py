@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Reticulum Emergency Node - Interactive Configuration Wizard
-Auspiciado por Cipropanama.org
+CIPRO Panamá — Tecnología para ayudar (https://www.cipropanama.org)
 Permite configurar y reconfigurar paso a paso el nodo Reticulum, RNodes,
 módems, transporte, mensajería de emergencia LXMF y páginas NomadNet.
 """
@@ -36,9 +36,8 @@ def banner():
     print(f"{C_CYAN}{C_BOLD}")
     print("╔════════════════════════════════════════════════════════════════════════════╗")
     print("║            🌐 ASISTENTE DE CONFIGURACIÓN - NODO RETICULUM                  ║")
-    print("║                   Red de Emergencia y Resiliencia                          ║")
-    print("║                      Auspiciado por Cipropanama.org                        ║")
-    print("║                        https://cipropanama.org                             ║")
+    print("║                 CIPRO Panamá — Tecnología para ayudar                      ║")
+    print("║                       www.cipropanama.org                                  ║")
     print("╚════════════════════════════════════════════════════════════════════════════╝")
     print(f"{C_RESET}")
 

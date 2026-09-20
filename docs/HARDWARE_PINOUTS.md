@@ -1,6 +1,7 @@
 # Guía de Conexión de Hardware y Pinouts (SBC a RNode LoRa)
 
-**Auspiciado por [Cipropanama.org](https://cipropanama.org)**
+**CIPRO Panamá — Tecnología para ayudar**  
+[www.cipropanama.org](https://www.cipropanama.org/)
 
 ---
 
@@ -54,3 +55,19 @@ Si se conecta un módulo transceptor LoRa UART directo (o microcontrolador RNode
 1. **Protección contra bajadas de tensión (Brownout):** Los transmisores LoRa pueden tener picos de consumo durante la transmisión. Coloque un condensador electrolítico de `100uF - 470uF` entre VCC y GND del transceptor si observa reinicios espontáneos.
 2. **Sistema de Respaldo Solar:** Panel solar de 20W - 50W con controlador MPPT y batería LiFePO4 de 12V con conversor reductor (Step-down) de alta eficiencia a 5.1V.
 3. **Watchdog de Hardware:** El instalador configura el script `watchdog.py` que monitorea periódicamente la estabilidad del sistema y los daemons para evitar cuelgues desatendidos.
+
+---
+
+## 🤝 Comunidad y Licencia
+
+Este proyecto está liberado bajo la licencia **MIT**. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
+
+Si este desarrollo te ha sido útil, te invitamos a mantener el reconocimiento y el enlace hacia el proyecto original.
+
+### Contacto CIPRO Panamá
+
+- 🌐 **Sitio Web:** [www.cipropanama.org](https://www.cipropanama.org/)
+- ✉️ **Correo Electrónico:** [info@cipropanama.org](mailto:info@cipropanama.org)
+
+> **CIPRO Panamá** — _Tecnología para ayudar._  
+> Desarrollado con ❤️ para las telecomunicaciones libres.

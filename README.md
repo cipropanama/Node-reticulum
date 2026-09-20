@@ -94,17 +94,17 @@ Te aparecerá un menú directo con las siguientes opciones:
 
 ---
 
-## 🤝 Proyecto Auspiciado por Cipropanama.org
+## 🤝 Comunidad y Licencia
 
-Este software forma parte de las herramientas de soberanía tecnológica y preparación ante emergencias impulsadas por **CIPRO** (Centro de Innovación y Proyectos de Panamá). 
+Este proyecto está liberado bajo la licencia **MIT**. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
 
-Si deseas conocer más sobre nuestra red comunitaria, colaborar con código o aportar hardware para nuevos puntos de enlace:
-- 🌐 Sitio Web: **[https://www.cipropanama.org](https://www.cipropanama.org)**
-- 📧 Contacto: **info@cipropanama.org**
-- 📦 Proyecto hermano: **[SMTP-Reticulum](https://github.com/cipropanama/SMTP-Reticulum)** (Pasarela de Correo Táctico por Radio).
+Si este desarrollo te ha sido útil, te invitamos a mantener el reconocimiento y el enlace hacia el proyecto original.
 
----
+### Contacto CIPRO Panamá
 
-## 📄 Licencia
+- 🌐 **Sitio Web:** [www.cipropanama.org](https://www.cipropanama.org/)
+- ✉️ **Correo Electrónico:** [info@cipropanama.org](mailto:info@cipropanama.org)
+- 📦 **Proyecto hermano:** [SMTP-Reticulum](https://github.com/cipropanama/SMTP-Reticulum)
 
-Este proyecto es software libre bajo licencia **MIT**. Eres libre de usarlo, modificarlo, compartirlo e implementarlo en tu propia comunidad o brigada de emergencias.
+> **CIPRO Panamá** — _Tecnología para ayudar._  
+> Desarrollado con ❤️ para las telecomunicaciones libres.

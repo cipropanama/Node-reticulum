@@ -1,6 +1,7 @@
 # Guía de Instalación y Operación: Reticulum Emergency Node
 
-**Auspiciado por [Cipropanama.org](https://cipropanama.org)**
+**CIPRO Panamá — Tecnología para ayudar**  
+[www.cipropanama.org](https://www.cipropanama.org/)
 
 ---
 
@@ -27,7 +28,7 @@
 Una vez que el SBC tenga acceso a Internet (por Wi-Fi o Ethernet), abra una terminal y ejecute el siguiente comando:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/cipropanama/ReticulumNode/main/install.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/cipropanama/Node-reticulum/main/install.sh | sudo bash
 ```
 
 ### O clonando directamente desde GitHub:
@@ -82,4 +83,20 @@ Opciones disponibles en el panel:
 
 Cualquier usuario conectado a la red Reticulum (a través de LoRa, WiFi o TCP) podrá acceder a la página Microweb del nodo:
 - Abrir la aplicación **NomadNet** o **Sideband**.
-- En el explorador de nodos o buscando por el nombre del nodo, podrá consultar la portada con telemetría en vivo, instrucciones de emergencia y la información oficial de **Cipropanama.org**.
+- En el explorador de nodos o buscando por el nombre del nodo, podrá consultar la portada con telemetría en vivo, instrucciones de emergencia y la información oficial de **CIPRO Panamá**.
+
+---
+
+## 🤝 Comunidad y Licencia
+
+Este proyecto está liberado bajo la licencia **MIT**. Su uso es totalmente libre para fines experimentales, respuesta a emergencias y proyectos comunitarios solidarios.
+
+Si este desarrollo te ha sido útil, te invitamos a mantener el reconocimiento y el enlace hacia el proyecto original.
+
+### Contacto CIPRO Panamá
+
+- 🌐 **Sitio Web:** [www.cipropanama.org](https://www.cipropanama.org/)
+- ✉️ **Correo Electrónico:** [info@cipropanama.org](mailto:info@cipropanama.org)
+
+> **CIPRO Panamá** — _Tecnología para ayudar._  
+> Desarrollado con ❤️ para las telecomunicaciones libres.

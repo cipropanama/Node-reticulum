@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Reticulum Emergency Node - Operator Control Panel & Management Console
-Auspiciado por Cipropanama.org - https://cipropanama.org
+CIPRO Panamá — Tecnología para ayudar (https://www.cipropanama.org)
 """
 
 import os
@@ -41,8 +41,8 @@ def print_header():
     print(f"{C_CYAN}{C_BOLD}")
     print("╔════════════════════════════════════════════════════════════════════════════╗")
     print("║            🌐 PANEL DE CONTROL - NODO DE EMERGENCIA RETICULUM              ║")
-    print("║                   Auspiciado por Cipropanama.org                           ║")
-    print("║                      https://cipropanama.org                               ║")
+    print("║                 CIPRO Panamá — Tecnología para ayudar                      ║")
+    print("║                       www.cipropanama.org                                  ║")
     print("╚════════════════════════════════════════════════════════════════════════════╝")
     print(f"{C_RESET}")
 
