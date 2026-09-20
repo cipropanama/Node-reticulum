@@ -85,6 +85,9 @@ install_system_dependencies() {
         python3-wheel \
         python3-serial \
         python3-cryptography \
+        python3-smbus \
+        i2c-tools \
+        qrencode \
         git \
         curl \
         jq \
@@ -94,9 +97,10 @@ install_system_dependencies() {
         tar \
         gzip
 
-    # Agregar usuario al grupo dialout para acceso a puertos serie sin root
+    # Agregar usuario al grupo dialout e i2c para acceso a hardware sin root
     if [ -n "$SUDO_USER" ]; then
         usermod -aG dialout "$SUDO_USER" || true
+        usermod -aG i2c "$SUDO_USER" 2>/dev/null || true
     fi
 }
 
@@ -115,7 +119,9 @@ install_reticulum_stack() {
         lxmf \
         nomadnet \
         pyserial \
-        cryptography
+        cryptography \
+        qrcode \
+        smbus2
 
     echo -e "${GREEN}✓ Paquetes de Reticulum instalados correctamente.${NC}"
 }
@@ -126,6 +132,7 @@ setup_workspace_and_files() {
     mkdir -p "$PAGES_DIR"
     mkdir -p "$CONFIG_DIR"
     mkdir -p "/var/backups/reticulum-node"
+    mkdir -p "/var/reticulum-node/lxmf_echo"
     mkdir -p "/root/.reticulum"
     mkdir -p "/root/.nomadnetwork"
 
@@ -181,9 +188,12 @@ setup_systemd_services() {
     systemctl daemon-reload
     systemctl enable rnsd.service || true
     systemctl enable nomadnet.service || true
+    systemctl enable rns-echo-bot.service || true
+    systemctl enable rns-powersave.service || true
     systemctl enable rns-watchdog.timer || true
     systemctl enable rns-telemetry.timer || true
 
+    systemctl start rns-powersave.service || true
     systemctl start rns-watchdog.timer || true
     systemctl start rns-telemetry.timer || true
 

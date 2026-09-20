@@ -91,6 +91,12 @@ def update_pages():
     stats = hardware_detect.get_system_stats()
     identity, active_interfaces = get_rns_status_summary()
     
+    try:
+        import battery_monitor
+        bat = battery_monitor.get_battery_status()
+    except Exception:
+        bat = {"status_str": "N/D"}
+    
     out_dir = cfg.get("nomadnet_pages_dir", "/var/nomadnet/pages")
     try:
         os.makedirs(out_dir, exist_ok=True)
@@ -121,6 +127,7 @@ def update_pages():
         "{RAM_TOTAL}": f"{stats['ram_total_mb']} MB",
         "{RAM_PERCENT}": f"{stats['ram_percent']}%",
         "{UPTIME}": stats["uptime"],
+        "{BATTERY_STATUS}": bat["status_str"],
         "{ACTIVE_INTERFACES}": active_interfaces,
         "{LAST_TELEMETRY_UPDATE}": now_str,
         "{LORA_FREQ}": str(cfg.get("lora_freq", "915.0")),

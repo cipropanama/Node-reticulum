@@ -66,6 +66,10 @@ El instalador detecta automáticamente el hardware (ARMv6, ARMv7, ARM64 o RISC-V
 </p>
 
 4. **Perro Guardián (*Watchdog*):** Los nodos en sitios remotos no pueden irse a reiniciar a mano. Un script en segundo plano supervisa que los servicios sigan vivos, limpia la memoria RAM si se satura, vigila que el módem USB no se desconecte por bajas de voltaje y hace un reinicio preventivo si ocurre un bloqueo severo.
+5. **🏓 Bot de Eco y Prueba de Cobertura LXMF:** Respondedor automático pasivo para que brigadistas y voluntarios en campo envíen `ping` o `test` y reciban confirmación inmediata de alcance, hora y telemetría.
+6. **🔋 Monitor de Batería Solar (I2C / INA219):** Medición de voltaje y nivel de batería LiFePO4 / 12V integrado en la telemetría de NomadNet para supervisar energía a distancia.
+7. **🌙 Perfil de Ahorro Extremo (Low-Power Tuning):** Reduce entre 20mA y 80mA de consumo continuo apagando la salida HDMI, los LEDs parpadeantes del SBC y el chip Bluetooth innecesario.
+8. **📱 Emparejamiento Rápido por Código QR:** Muestra en la terminal un código QR en caracteres ASCII para escanear con la app **Sideband** móvil y vincularse con el nodo en 1 segundo.
 
 ---
 
@@ -81,10 +85,13 @@ Te aparecerá un menú directo con las siguientes opciones:
 
 - **[1] 📊 Ver Estado y Telemetría:** Muestra `rnstatus`, interfaces de radio conectadas, memoria, temperatura y paquetes cursados.
 - **[2] ⚙️ Reconfigurar el Nodo:** Asistente paso a paso para cambiar el nombre, ubicación, parámetros LoRa (915 MHz, 868 MHz, 433 MHz, potencia, ancho de banda), módems serie o servidores TCP.
-- **[3] 📜 Ver Registros en Vivo:** Consulta qué está pasando en Reticulum, NomadNet o el Watchdog.
-- **[4] 🛠️ Gestión de Servicios:** Reiniciar, detener o arrancar la red.
-- **[5] 💾 Copias de Seguridad:** Crea o restaura un respaldo de tus claves criptográficas e identidades en un archivo `.tar.gz`.
-- **[6] 🔄 Actualizar Software:** Descarga las últimas mejoras del repositorio en GitHub con un solo clic.
+- **[3] 📱 Mostrar Código QR de Conexión Rápida:** Genera el QR en consola para escanear con la app Sideband móvil.
+- **[4] 🔋 Monitor de Batería Solar:** Consulta el voltaje real de la batería y nivel de carga.
+- **[5] 🌙 Perfil de Ahorro de Energía:** Activa o desactiva el apagado de HDMI y LEDs de estado.
+- **[6] 📜 Ver Registros en Vivo:** Consulta qué está pasando en Reticulum, NomadNet o el Watchdog.
+- **[7] 🛠️ Gestión de Servicios:** Reiniciar, detener o arrancar la red.
+- **[8] 💾 Copias de Seguridad:** Crea o restaura un respaldo de tus claves criptográficas e identidades en un archivo `.tar.gz`.
+- **[9] 🔄 Actualizar Software:** Descarga las últimas mejoras del repositorio en GitHub con un solo clic.
 
 ---
 

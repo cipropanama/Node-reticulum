@@ -17,6 +17,7 @@
 - *Hardware SBC:* {SBC_MODEL} ({SBC_ARCH})
 - *Estado CPU:* {CPU_TEMP} | Carga: {LOAD_AVG}
 - *Memoria RAM:* {RAM_USED} / {RAM_TOTAL} ({RAM_PERCENT})
+- *Batería Solar:* {BATTERY_STATUS}
 - *Tiempo Activo (Uptime):* {UPTIME}
 - *Interfaces Activas:* {ACTIVE_INTERFACES}
 - *Última Actualización:* {LAST_TELEMETRY_UPDATE}

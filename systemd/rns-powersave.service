@@ -1,0 +1,14 @@
+[Unit]
+Description=CIPRO Low-Power Optimization Service (Disables HDMI and LEDs)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /opt/reticulum-node/scripts/power_save.py
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=Reticulum LXMF Echo & Coverage Test Bot (CIPRO Panamá)
+After=rnsd.service network.target
+Wants=rnsd.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /opt/reticulum-node/scripts/lxmf_echo_bot.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
