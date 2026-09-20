@@ -44,33 +44,39 @@ Para sitios inaccesibles, no todas las baterías son iguales. La **Profundidad d
 ```
 
 ### Detalle de cada tecnología:
-1. **LiFePO4 (Litio Ferrofosfato - 12.8V):** *(Recomendación CIPRO Panamá)*
+1. **LiFePO4 (Litio Ferrofosfato - 12.8V):** *(Recomendación CIPRO Panamá para sitios críticos)*
    - Puedes usar el **90% de su capacidad nominal** sin degradarla.
    - Vida útil de **8 a 10 años** (más de 3,500 ciclos diarios).
    - Químicamente estable: no explota ni se incendia ante altas temperaturas o sobrecargas.
 2. **Li-Ion (Celdas 18650 / 21700 en arreglo 3S 11.1V–12.6V):**
    - Muy ligera y compacta. Requiere placa de protección BMS (*Battery Management System*) obligatoria.
    - Vida útil de **2 a 3 años** (500–800 ciclos).
-3. **Plomo-Ácido / AGM / Gel (12V Automotriz o Sellada VRLA):**
-   - **Solo permite usar el 50% de su capacidad**. Si descargas una batería de plomo al 100%, morirá en menos de 3 meses.
-   - Muy pesada para transportar a cerros a pie, pero económica y disponible en cualquier ferretería local.
+3. **Plomo-Ácido / AGM / Gel (12V):**
+   - **Baterías de Moto / Ciclomotor / Scooter (12V 4Ah, 7Ah, 9Ah):** *(Excelente opción económica y accesible en cualquier poblado).* Son livianas (~1.5 a 3.0 kg), económicas ($15 a $25 USD) y disponibles en cualquier taller o repuestera de motos.
+   - **Baterías de Automóvil / Estacionarias VRLA (12V 18Ah, 45Ah):** Gran capacidad pero pesadas.
+   - ⚠️ **Regla de Oro del Plomo:** **Solo permite usar el 50% de su capacidad útil (DoD)**. Descargar una batería de plomo por debajo del 50% (menos de 12.0V en reposo) provoca sulfatación irreversible y destruye la batería en pocos meses.
 
 ---
 
 ## 3. Matriz de Autonomía sin Sol (Días de Respaldo Continuo)
 
-Días completos que el nodo puede funcionar **en total oscuridad / lluvia continua** según la capacidad de la batería:
+Días completos que el nodo puede funcionar **en total oscuridad / lluvia continua** según la capacidad y tecnología de la batería:
 
-| Capacidad Batería (12V) | Energía Útil (LiFePO4 - 90% DoD) | Energía Útil (Plomo AGM - 50% DoD) | Autonomía: RPi Zero W (0.9W) | Autonomía: RPi Zero 2W (1.2W) | Autonomía: Orange Pi Zero 3 (1.6W) | Autonomía: ESP32 RNode (0.3W) |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **6 Ah (LiFePO4)** | **69.1 Wh** | — | **3.2 Días** (76 horas) | **2.3 Días** (56 horas) | **1.8 Días** (43 horas) | **9.6 Días** (230 horas) |
-| **10 Ah (LiFePO4)** | **115.2 Wh** | — | **5.3 Días** (128 horas) | **3.9 Días** (94 horas) | **3.0 Días** (72 horas) | **16.0 Días** (384 horas) |
-| **12 Ah (LiFePO4)** | **138.2 Wh** | — | **6.4 Días** (153 horas) | **4.7 Días** (113 horas) | **3.6 Días** (86 horas) | **19.2 Días** (460 horas) |
-| **20 Ah (LiFePO4)** | **230.4 Wh** | — | **10.6 Días** (256 horas) | **7.8 Días** (188 horas) | **6.0 Días** (144 horas) | **32.0 Días** (768 horas) |
-| **18 Ah (Plomo AGM)** | — | **108.0 Wh** | **5.0 Días** (120 horas) | **3.6 Días** (88 horas) | **2.8 Días** (67 horas) | **15.0 Días** (360 horas) |
-| **45 Ah (Plomo Auto)**| — | **270.0 Wh** | **12.5 Días** (300 horas) | **9.2 Días** (225 horas) | **7.0 Días** (168 horas) | **37.5 Días** (900 horas) |
+| Tipo y Capacidad de Batería (12V) | Aplicación / Origen Típico | Energía Útil (DoD) | Autonomía: RPi Zero W (0.9W) | Autonomía: RPi Zero 2W (1.2W) | Autonomía: Orange Pi Zero 3 (1.6W) | Autonomía: ESP32 RNode (0.3W) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Plomo 12V 4 Ah** *(50% DoD)* | **Ciclomotor / Moto 50-110cc** | **24.0 Wh** | **1.1 Días** (27 horas) | **0.8 Días** (20 horas) | **0.6 Días** (15 horas) | **3.3 Días** (80 horas) |
+| **Plomo 12V 7 Ah** *(50% DoD)* | **Moto 125-150cc / Alarmas** | **42.0 Wh** | **1.9 Días** (47 horas) | **1.4 Días** (34 horas) | **1.1 Días** (26 horas) | **5.8 Días** (140 horas) |
+| **Plomo 12V 9 Ah** *(50% DoD)* | **Moto 200-250cc / Scooter** | **54.0 Wh** | **2.5 Días** (60 horas) | **1.8 Días** (44 horas) | **1.4 Días** (34 horas) | **7.5 Días** (180 horas) |
+| **LiFePO4 12V 6 Ah** *(90% DoD)* | Pack Litio Portátil | **69.1 Wh** | **3.2 Días** (76 horas) | **2.3 Días** (56 horas) | **1.8 Días** (43 horas) | **9.6 Días** (230 horas) |
+| **LiFePO4 12V 10 Ah** *(90% DoD)* | Solar Estándar (Recomendado)| **115.2 Wh**| **5.3 Días** (128 horas)| **3.9 Días** (94 horas) | **3.0 Días** (72 horas) | **16.0 Días** (384 horas) |
+| **LiFePO4 12V 12 Ah** *(90% DoD)* | Solar Extendido | **138.2 Wh**| **6.4 Días** (153 horas)| **4.7 Días** (113 horas)| **3.6 Días** (86 horas) | **19.2 Días** (460 horas) |
+| **LiFePO4 12V 20 Ah** *(90% DoD)* | Solar Heavy Duty | **230.4 Wh**| **10.6 Días** (256 horas)| **7.8 Días** (188 horas)| **6.0 Días** (144 horas)| **32.0 Días** (768 horas)|
+| **Plomo AGM 12V 18 Ah** *(50% DoD)* | Respaldo UPS / Telecom | **108.0 Wh**| **5.0 Días** (120 horas)| **3.6 Días** (88 horas) | **2.8 Días** (67 horas) | **15.0 Días** (360 horas)|
+| **Plomo Auto 12V 45 Ah** *(50% DoD)* | Batería Automotriz | **270.0 Wh**| **12.5 Días** (300 horas)| **9.2 Días** (225 horas)| **7.0 Días** (168 horas)| **37.5 Días** (900 horas)|
 
-> 🎯 **Objetivo de Diseño CIPRO Panamá:** Para cerros y torres remotas se debe dimensionar para un mínimo de **4 a 5 días de autonomía sin sol** (para soportar frentes de tormentas o temporales prolongados).
+> 🎯 **Consejo Práctico CIPRO Panamá:**
+> - Si usas una **batería de moto económica (12V 7Ah o 9Ah)** con una **Raspberry Pi Zero W**, obtendrás entre **2 a 2.5 días de autonomía sin sol**, lo cual es suficiente para la gran mayoría de instalaciones si se complementa con un panel de 20W.
+> - Con un **ESP32 RNode standalone**, una pequeña batería de ciclomotor de **4Ah** rinde más de **3 días continuos**, y una de **7Ah** casi **6 días**.
 
 ---
 
@@ -144,6 +150,20 @@ Utilice estos tres kits pre-calculados como referencia según la ubicación y el
 * **Batería:** **LiFePO4 12.8V 20Ah a 30Ah** (o Batería AGM 12V 45Ah).
 * **Autonomía sin sol:** **4.5 a 6.0 Días continuos**.
 * **Tiempo de recarga completa:** **4.0 horas de sol pico**.
+
+---
+
+### 📦 Kit 4: Nodo Económico / Comunitario (Batería de Moto o Ciclomotor)
+*La opción más económica y fácil de armar en cualquier comunidad rural o aislada con piezas locales.*
+
+* **Microcomputadora:** Raspberry Pi Zero W o ESP32 RNode.
+* **Panel Solar:** **20W Monocristalino o Policristalino** (fácil de adquirir por ~$15-$20 USD).
+* **Batería:** **Batería de Moto 12V 7Ah o 9Ah (Sellada AGM tipo YTX7A-BS o YTX9-BS)** (~$18-$25 USD en repuesteras de motos).
+* **Controlador Solar:** Controlador básico PWM 10A 12V (~$5-$8 USD).
+* **Regulador Step-Down:** LM2596 ajustado a 5.15V.
+* **Autonomía sin sol:** **1.9 a 2.5 Días continuos** (con RPi Zero W) o **5.8 a 7.5 Días** (con ESP32 RNode).
+* **Tiempo de recarga completa:** **2.0 a 2.5 horas de sol pico**.
+* **Ventaja clave:** Se puede reemplazar la batería inmediatamente en cualquier pueblo o taller sin esperar envíos internacionales de litio.
 
 ---
 
