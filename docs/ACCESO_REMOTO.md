@@ -34,13 +34,15 @@ Para acceder al nodo cuando se visita en campo con un teléfono móvil o portát
 
 ---
 
-## 3. Túneles Remotos sobre Internet (Hubs Reticulum)
+## 3. Túneles Remotos sobre Internet (Servidor Central CIPRO Panamá)
 
-Si el nodo tiene acceso esporádico o permanente a internet (ej. enlace 4G/LTE, Starlink o radioenlace IP):
-1. Ejecute `sudo rns-admin` -> Opción `[2]` (Asistente de Configuración).
-2. Habilite **TCP Client Interface**.
-3. Ingrese la dirección del Hub comunitario o de la red de emergencia (ej. `hub.reticulum.network` o el servidor privado de Cipropanama).
-4. El nodo enrutará automáticamente el tráfico local de LoRa hacia el resto del mundo a través del túnel seguro y encriptado.
+Si el nodo dispone de acceso permanente o intermitente a Internet (WiFi local, módem 4G/LTE, enlace satelital Starlink o radioenlace IP):
+1. El nodo se conecta automáticamente al **Servidor Central de Reticulum de CIPRO Panamá**:
+   - **Host:** `rns.cipropanama.org`
+   - **Puerto:** `4242`
+2. **Beneficio:** Todos los mensajes de emergencia, telemetría y paquetes LoRa recibidos localmente en tu zona se transmiten y sincronizan a través de Internet con el resto de nodos de la red CIPRO en Panamá y el mundo.
+3. Para modificar o deshabilitar este enlace en cualquier momento:
+   - Ejecuta `sudo rns-admin` -> Opción `[2]` (Asistente de Configuración) o edita `/root/.reticulum/config`.
 
 ---
 

@@ -185,12 +185,12 @@ def generate_rns_config(cfg, rns_conf_path):
             ""
         ])
 
-    # 5. TCP Client (Connect to Upstream Hub)
-    if cfg.get("enable_tcp_client", False):
-        target_host = cfg.get("tcp_target_host", "hub.reticulum.network")
+    # 5. TCP Client (Connect to Upstream Hub - CIPRO Panamá)
+    if cfg.get("enable_tcp_client", True):
+        target_host = cfg.get("tcp_target_host", "rns.cipropanama.org")
         target_port = int(cfg.get("tcp_target_port", "4242"))
         lines.extend([
-            f"  [[TCP Hub - {target_host}]]",
+            f"  [[CIPRO Panama Mesh Hub - {target_host}]]",
             "    type = TCPClientInterface",
             "    enabled = yes",
             f"    target_host = {target_host}",
@@ -320,10 +320,14 @@ def run_wizard():
     if cfg["enable_tcp_server"]:
         cfg["tcp_server_port"] = prompt("Puerto de escucha TCP", str(saved.get("tcp_server_port", "4242")))
 
-    # TCP Client (Upstream Hub)
-    cfg["enable_tcp_client"] = prompt_bool("¿Desea conectar este nodo a un Hub Reticulum remoto (a través de Internet si está disponible)?", saved.get("enable_tcp_client", False))
+    # TCP Client (Upstream Hub - CIPRO Panamá)
+    print(f"\n{C_CYAN}--- Enlace a la Red Reticulum de CIPRO Panamá (Internet Hub) ---{C_RESET}")
+    print("Si este nodo cuenta con conexión a Internet (WiFi / Ethernet / 4G), conectarse")
+    print("al servidor de CIPRO Panamá (rns.cipropanama.org) permite que se integre")
+    print("automáticamente a la red comunitaria nacional de emergencia.")
+    cfg["enable_tcp_client"] = prompt_bool("¿Conectar este nodo al Hub oficial de CIPRO Panamá (rns.cipropanama.org)?", saved.get("enable_tcp_client", True))
     if cfg["enable_tcp_client"]:
-        cfg["tcp_target_host"] = prompt("Dirección IP o Dominio del Hub", saved.get("tcp_target_host", "hub.reticulum.network"))
+        cfg["tcp_target_host"] = prompt("Dirección IP o Dominio del Hub", saved.get("tcp_target_host", "rns.cipropanama.org"))
         cfg["tcp_target_port"] = prompt("Puerto del Hub", str(saved.get("tcp_target_port", "4242")))
 
     cfg["serial_ports"] = serial_ports_configured
