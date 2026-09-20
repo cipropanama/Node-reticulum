@@ -128,7 +128,55 @@ Una vez detectado, el sistema Reticulum Emergency Node comenzará a reportar el 
 
 ---
 
-## 4. Recomendaciones de Energía para Despliegues Remotos
+## 4. Conexión del Sensor Barométrico y Ambiental BME280 / BMP280 (I2C)
+
+El sensor **BME280** (o **BMP280**) mide la presión barométrica (hPa), temperatura y humedad ambiental. Es ideal para alertar sobre la aproximación de tormentas o frentes de baja presión en sitios remotos.
+
+### A. Pines y Conexión en Paralelo I2C
+
+Dado que el protocolo **I2C es un bus compartido por direcciones**, puedes conectar el sensor BME280/BMP280 **en paralelo exactamente a los mismos 4 pines GPIO** donde se conecta el sensor de batería INA219, sin interferencias:
+
+| Pin Sensor BME280 | Raspberry Pi Zero W / 2W | Orange Pi Zero / Zero 3 | MangoPi MQ-Pro (D1) | Descripción |
+| :--- | :--- | :--- | :--- | :--- |
+| **VCC / VIN** | Pin 1 o 17 (3.3V) | Pin 1 (3.3V) | Pin 1 (3.3V) | Alimentación lógica 3.3V (¡No conectar a 5V!) |
+| **GND** | Pin 6 / 9 / 14 / 20 (GND) | Pin 2 / 8 (GND) | Pin 6 (GND) | Tierra común |
+| **SDA / SDI** | Pin 3 (GPIO 2 / I2C1_SDA) | Pin 3 (I2C0_SDA) | Pin 3 (TWI2_SDA) | Línea de datos (en paralelo con INA219) |
+| **SCL / SCK** | Pin 5 (GPIO 3 / I2C1_SCL) | Pin 5 (I2C0_SCL) | Pin 5 (TWI2_SCL) | Línea de reloj (en paralelo con INA219) |
+
+```
+                       ┌──────────────────────────────┐
+                       │  Microcomputador SBC (GPIO)  │
+                       │   [3.3V]  [GND]  [SDA]  [SCL]│
+                       └─────┬───────┬──────┬──────┬──┘
+                             │       │      │      │  (Bus I2C Compartido)
+              ┌──────────────┴───────┼──────┴──────┼─────────────┐
+              │                      │             │             │
+              ▼                      ▼             ▼             ▼
+      ┌───────────────┐                    ┌───────────────┐
+      │ Módulo INA219 │                    │ Módulo BME280 │
+      │  (Dir: 0x40)  │                    │(Dir: 0x76/0x77│
+      │Batería / Solar│                    │Presión y Clima│
+      └───────────────┘                    └───────────────┘
+```
+
+---
+
+### B. Verificación de Ambos Sensores en el Bus
+
+Ejecuta en la terminal:
+```bash
+sudo i2cdetect -y 1
+```
+
+Si ambos sensores están conectados correctamente, verás ambas direcciones activas al mismo tiempo:
+- **`40`**: Módulo sensor de Batería Solar INA219.
+- **`76`** o **`77`**: Sensor barométrico y ambiental BME280 / BMP280.
+
+El software detectará ambos automáticamente y publicará la presión barométrica y el pronóstico de tormenta en la página NomadNet y en el menú `sudo rns-admin` -> Opción `[7]`.
+
+---
+
+## 5. Recomendaciones de Energía para Despliegues Remotos
 
 1. **Protección contra bajadas de tensión (Brownout):** Los transmisores LoRa pueden tener picos de consumo durante la transmisión. Coloque un condensador electrolítico de `100uF - 470uF` entre VCC y GND del transceptor si observa reinicios espontáneos.
 2. **Sistema de Respaldo Solar:** Panel solar de 20W - 50W con controlador MPPT y batería LiFePO4 de 12V con conversor reductor (Step-down) de alta eficiencia a 5.1V.
