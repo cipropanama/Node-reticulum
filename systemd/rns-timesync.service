@@ -1,0 +1,15 @@
+[Unit]
+Description=Reticulum Offline Time Synchronization (RTC & GPS) (CIPRO Panamá)
+Before=rnsd.service
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /opt/reticulum-node/scripts/time_sync.py
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

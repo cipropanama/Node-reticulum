@@ -1,0 +1,16 @@
+[Unit]
+Description=Reticulum Periodic Mesh Beacon & Announce Service (CIPRO Panamá)
+After=rnsd.service network.target
+Wants=rnsd.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /opt/reticulum-node/scripts/mesh_beacon.py
+Restart=always
+RestartSec=15
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

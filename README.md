@@ -73,6 +73,10 @@ El instalador detecta automáticamente el hardware (ARMv6, ARMv7, ARM64 o RISC-V
 9. **🌦️ Estación Meteorológica y Alerta de Tormenta (I2C / BME280 / BMP280):** Monitorea presión atmosférica (hPa), temperatura y humedad sobre el mismo bus I2C en paralelo, alertando automáticamente en caso de caídas bruscas de presión barométrica.
 10. **📡 Diagnóstico y Prueba de RF / Antena:** Herramienta interactiva para verificar la emisión del transceptor LoRa y recepción de paquetes antes de subir a la torre.
 11. **📄 Ficha Técnica para Gabinete IP67:** Genera una ficha técnica limpia en HTML/TXT lista para imprimir y plastificar en la tapa del gabinete del nodo.
+12. **🛰️ Sincronización de Hora Offline (RTC DS3231 / GPS NMEA):** Mantiene la fecha y hora exacta del sistema en cerros sin internet mediante módulo RTC I2C (`0x68`) o receptor GPS serie, exportando coordenadas para telemetría.
+13. **📢 Baliza de Malla (*Mesh Beacon*):** Difunde anuncios (*Announces*) periódicos programados en Reticulum para que radios y móviles con Sideband descubran automáticamente la ruta hacia el repetidor.
+14. **🚐 Modo Táctico Móvil (Punto de Acceso WiFi):** Permite levantar un Hotspot WiFi local `CIPRO-RESCUE-NODE` para que rescatistas en campo se conecten sin cables con sus teléfonos.
+15. **⚡ Modo de Supervivencia Energética (*Brownout Protection*):** Detecta caídas críticas de voltaje en la batería ($<11.6\text{V}$) y reduce automáticamente el consumo de energía para evitar que el nodo se apague.
 
 ---
 
@@ -86,19 +90,22 @@ sudo rns-admin
 
 Te aparecerá un menú directo con las siguientes opciones:
 
-- **[1] 📊 Ver Estado y Telemetría:** Muestra `rnstatus`, interfaces de radio conectadas, memoria, temperatura y paquetes cursados.
-- **[2] ⚙️ Reconfigurar el Nodo:** Asistente paso a paso para cambiar el nombre, ubicación, parámetros LoRa (915 MHz, 868 MHz, 433 MHz, potencia, ancho de banda), módems serie o servidores TCP.
-- **[3] 📡 Prueba y Diagnóstico de RF / Antena:** Verificación de transceptor y potencia LoRa.
-- **[4] 📄 Generar Ficha Técnica Imprimible:** Exporta el resumen del nodo en HTML/TXT para la caja estanca.
-- **[5] 📱 Mostrar Código QR de Conexión Rápida:** Genera el QR en consola para escanear con la app Sideband móvil.
-- **[6] 🔋 Monitor de Batería Solar:** Consulta el voltaje real de la batería y nivel de carga.
-- **[7] 🌦️ Estación Meteorológica y Presión:** Consulta barómetro, temperatura y riesgo de tormenta.
-- **[8] 🌙 Perfil de Ahorro de Energía:** Activa o desactiva el apagado de HDMI y LEDs de estado.
-- **[9] 📜 Ver Registros en Vivo:** Consulta qué está pasando en Reticulum, NomadNet o el Watchdog.
-- **[10] 🛠️ Gestión de Servicios:** Reiniciar, detener o arrancar la red.
-- **[11] 💾 Copias de Seguridad:** Crea o restaura un respaldo de tus claves criptográficas e identidades en un archivo `.tar.gz`.
-- **[12] 🔄 Actualizar Software:** Descarga las últimas mejoras del repositorio en GitHub con un solo clic.
-- **[13] 🔌 Reiniciar o Apagar SBC:** Opciones de reinicio o apagado seguro del equipo.
+- **[1]  📊 Ver Estado y Telemetría:** Muestra `rnstatus`, interfaces de radio conectadas, memoria, temperatura y paquetes cursados.
+- **[2]  ⚙️ Asistente de Configuración:** Asistente paso a paso para cambiar el nombre, ubicación, parámetros LoRa (915 MHz, 868 MHz, 433 MHz, potencia, ancho de banda), módems serie o servidores TCP.
+- **[3]  📡 Prueba y Diagnóstico de RF / Antena:** Verificación de transceptor y potencia LoRa.
+- **[4]  📄 Generar Ficha Técnica Imprimible:** Exporta el resumen del nodo en HTML/TXT para la caja estanca.
+- **[5]  📱 Mostrar Código QR de Conexión Rápida:** Genera el QR en consola para escanear con la app Sideband móvil.
+- **[6]  🔋 Monitor de Batería Solar:** Consulta el voltaje real de la batería y nivel de carga.
+- **[7]  🌦️ Estación Meteorológica y Presión:** Consulta barómetro, temperatura y riesgo de tormenta.
+- **[8]  🛰️ Sincronización de Hora Offline y GPS:** Sincronización con RTC DS3231 o receptor GPS.
+- **[9]  📢 Baliza y Anuncios de Malla:** Emisión y control de anuncios periódicos (*Mesh Beacon*).
+- **[10] 🚐 Modo Táctico Móvil / Hotspot AP:** Configura punto de acceso WiFi local para brigadistas.
+- **[11] 🌙 Perfil de Ahorro de Energía:** Activa o desactiva el apagado de HDMI y LEDs de estado.
+- **[12] 📜 Ver Registros en Vivo:** Consulta qué está pasando en Reticulum, NomadNet o el Watchdog.
+- **[13] 🛠️ Gestión de Servicios:** Reiniciar, detener o arrancar la red.
+- **[14] 💾 Copias de Seguridad:** Crea o restaura un respaldo de tus claves criptográficas e identidades en un archivo `.tar.gz`.
+- **[15] 🔄 Actualizar Software:** Descarga las últimas mejoras del repositorio en GitHub con un solo clic.
+- **[16] 🔌 Reiniciar o Apagar SBC:** Opciones de reinicio o apagado seguro del equipo.
 
 ---
 
@@ -110,6 +117,8 @@ Te aparecerá un menú directo con las siguientes opciones:
 | **Radio LoRa (RNode)** | LilyGO T-Beam, T-Echo, Heltec LoRa32 v3, RNode DIY (SX1262 / SX1276) | Conexión directa por cable USB o por pines GPIO UART |
 | **Sensor de Batería** | Módulo INA219 (I2C `0x40`) | Medición de 0-26V de batería solar/LiFePO4 |
 | **Sensor Barométrico/Clima**| Módulo BME280 / BMP280 (I2C `0x76`/`0x77`) | Presión atmosférica, temperatura y tormentas (I2C compartido) |
+| **Reloj RTC por Hardware** | Módulo DS3231 / DS1307 (I2C `0x68`) | Mantiene la hora exacta en nodos aislados sin internet |
+| **Receptor GPS** | Módulo u-blox NEO-6M / Quectel (UART / USB) | Sincronización UTC y reporte de coordenadas de emergencia |
 | **Módem Packet** | TNC KISS por USB / Serie | Compatible con equipos VHF/UHF de radioaficionados |
 | **Alimentación** | Fuente 5V 2A o sistema solar 12V con conversor Step-Down | Para evitar micro-cortes en transmisión LoRa |
 

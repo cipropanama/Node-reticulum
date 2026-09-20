@@ -190,9 +190,11 @@ setup_systemd_services() {
     systemctl enable nomadnet.service || true
     systemctl enable rns-echo-bot.service || true
     systemctl enable rns-powersave.service || true
+    systemctl enable rns-timesync.service || true
     systemctl enable rns-watchdog.timer || true
     systemctl enable rns-telemetry.timer || true
 
+    systemctl start rns-timesync.service || true
     systemctl start rns-powersave.service || true
     systemctl start rns-watchdog.timer || true
     systemctl start rns-telemetry.timer || true

@@ -291,6 +291,52 @@ def generate_datasheet_menu():
         print("Generador de ficha no encontrado.")
     pause()
 
+def manage_time_sync():
+    clear_screen()
+    print_header()
+    ts_script = os.path.join(SCRIPTS_DIR, "time_sync.py")
+    if os.path.exists(ts_script):
+        subprocess.run([sys.executable, ts_script])
+    else:
+        print("Módulo de sincronización de hora no encontrado.")
+    pause()
+
+def manage_wifi_mode():
+    clear_screen()
+    print_header()
+    wf_script = os.path.join(SCRIPTS_DIR, "wifi_mode.py")
+    if os.path.exists(wf_script):
+        subprocess.run([sys.executable, wf_script])
+    else:
+        print("Gestor de WiFi no encontrado.")
+    pause()
+
+def manage_beacon():
+    clear_screen()
+    print_header()
+    print(f"{C_MAGENTA}{C_BOLD}=== 📢 BALIZA DE MALLA PERIÓDICA (MESH BEACON) ==={C_RESET}\n")
+    print("Emite anuncios criptográficos periódicos en la red Reticulum para que")
+    print("radios y móviles cercanos descubran al nodo repetidor automáticamente.\n")
+    print("  [1] Emitir un anuncio de baliza ahora mismo (One-Shot)")
+    print("  [2] Activar servicio de baliza automática periódica al arranque (systemd)")
+    print("  [3] Detener servicio de baliza")
+    print("  [4] Volver")
+
+    opt = input("\nOpción [1-4]: ").strip()
+    bc_script = os.path.join(SCRIPTS_DIR, "mesh_beacon.py")
+    if opt == "1":
+        if os.path.exists(bc_script):
+            subprocess.run([sys.executable, bc_script, "--oneshot"])
+        pause()
+    elif opt == "2":
+        subprocess.run(["systemctl", "enable", "--now", "rns-beacon.service"])
+        print(f"\n{C_GREEN}✓ Baliza de malla activada como servicio de arranque.{C_RESET}")
+        pause()
+    elif opt == "3":
+        subprocess.run(["systemctl", "disable", "--now", "rns-beacon.service"])
+        print(f"\n{C_YELLOW}✓ Baliza de malla detenida.{C_RESET}")
+        pause()
+
 def main_menu():
     while True:
         clear_screen()
@@ -303,23 +349,26 @@ def main_menu():
             print(f"{C_BOLD}SBC:{C_RESET} {s['model']} | {C_BOLD}RAM:{C_RESET} {s['ram_percent']}% | {C_BOLD}Uptime:{C_RESET} {s['uptime']}{t_str}\n")
         
         print(f"{C_BOLD}SELECCIONE UNA ACCIÓN:{C_RESET}")
-        print(f"  [{C_GREEN}1{C_RESET}] 📊 Ver Estado y Telemetría del Nodo (rnstatus)")
-        print(f"  [{C_GREEN}2{C_RESET}] ⚙️  Ejecutar Asistente de Configuración Paso a Paso (RNodes / Módems / Nombre)")
-        print(f"  [{C_GREEN}3{C_RESET}] 📡 Prueba y Diagnóstico de RF / Antena LoRa (Test de Hardware)")
-        print(f"  [{C_GREEN}4{C_RESET}] 📄 Generar Ficha Técnica Imprimible para la Caja Estanca")
-        print(f"  [{C_GREEN}5{C_RESET}] 📱 Mostrar Código QR de Conexión Rápida (Sideband / NomadNet)")
-        print(f"  [{C_GREEN}6{C_RESET}] 🔋 Monitor de Batería Solar y Voltaje I2C (INA219 / PMIC)")
-        print(f"  [{C_GREEN}7{C_RESET}] 🌦️  Estación Meteorológica y Presión Barométrica (BME280 / BMP280)")
-        print(f"  [{C_GREEN}8{C_RESET}] 🌙 Perfil de Ahorro de Energía (Apagar HDMI / LEDs / Bluetooth)")
-        print(f"  [{C_GREEN}9{C_RESET}] 📜 Ver Registros y Logs del Sistema (rnsd, NomadNet, Watchdog)")
-        print(f"  [{C_GREEN}10{C_RESET}] 🛠️  Gestionar Servicios (Iniciar / Detener / Reiniciar)")
-        print(f"  [{C_GREEN}11{C_RESET}] 💾 Copias de Seguridad y Restauración de Identidad")
-        print(f"  [{C_GREEN}12{C_RESET}] 🔄 Actualizar Software del Nodo")
-        print(f"  [{C_GREEN}13{C_RESET}] 🔌 Reiniciar o Apagar el Nodo SBC")
-        print(f"  [{C_RED}0{C_RESET}] Salir a la Terminal")
+        print(f"  [{C_GREEN}1{C_RESET}]  📊 Ver Estado y Telemetría del Nodo (rnstatus)")
+        print(f"  [{C_GREEN}2{C_RESET}]  ⚙️  Asistente de Configuración (RNodes / Módems / Nombre / Hub)")
+        print(f"  [{C_GREEN}3{C_RESET}]  📡 Prueba y Diagnóstico de RF / Antena LoRa (Test Hardware)")
+        print(f"  [{C_GREEN}4{C_RESET}]  📄 Generar Ficha Técnica Imprimible para la Caja Estanca")
+        print(f"  [{C_GREEN}5{C_RESET}]  📱 Mostrar Código QR de Conexión Rápida (Sideband)")
+        print(f"  [{C_GREEN}6{C_RESET}]  🔋 Monitor de Batería Solar y Voltaje I2C (INA219 / PMIC)")
+        print(f"  [{C_GREEN}7{C_RESET}]  🌦️  Estación Meteorológica y Presión Barométrica (BME280 / BMP280)")
+        print(f"  [{C_GREEN}8{C_RESET}]  🛰️  Sincronización de Hora Offline y GPS (DS3231 / NMEA)")
+        print(f"  [{C_GREEN}9{C_RESET}]  📢 Baliza y Anuncios Periódicos de Malla (Mesh Beacon)")
+        print(f"  [{C_GREEN}10{C_RESET}] 🚐 Modo Táctico Móvil / Hotspot AP WiFi Local")
+        print(f"  [{C_GREEN}11{C_RESET}] 🌙 Perfil de Ahorro de Energía (Apagar HDMI / LEDs / Bluetooth)")
+        print(f"  [{C_GREEN}12{C_RESET}] 📜 Ver Registros y Logs del Sistema (rnsd, NomadNet, Watchdog)")
+        print(f"  [{C_GREEN}13{C_RESET}] 🛠️  Gestionar Servicios (Iniciar / Detener / Reiniciar)")
+        print(f"  [{C_GREEN}14{C_RESET}] 💾 Copias de Seguridad y Restauración de Identidad")
+        print(f"  [{C_GREEN}15{C_RESET}] 🔄 Actualizar Software del Nodo")
+        print(f"  [{C_GREEN}16{C_RESET}] 🔌 Reiniciar o Apagar el Nodo SBC")
+        print(f"  [{C_RED}0{C_RESET}]  Salir a la Terminal")
         
         try:
-            choice = input(f"\n{C_BOLD}Ingrese opción [0-13]: {C_RESET}").strip()
+            choice = input(f"\n{C_BOLD}Ingrese opción [0-16]: {C_RESET}").strip()
         except (KeyboardInterrupt, EOFError):
             print("\nSaliendo...")
             break
@@ -339,16 +388,22 @@ def main_menu():
         elif choice == "7":
             show_environmental()
         elif choice == "8":
-            manage_power_save()
+            manage_time_sync()
         elif choice == "9":
-            view_logs()
+            manage_beacon()
         elif choice == "10":
-            manage_services()
+            manage_wifi_mode()
         elif choice == "11":
-            backup_restore_identity()
+            manage_power_save()
         elif choice == "12":
-            update_software()
+            view_logs()
         elif choice == "13":
+            manage_services()
+        elif choice == "14":
+            backup_restore_identity()
+        elif choice == "15":
+            update_software()
+        elif choice == "16":
             clear_screen()
             print_header()
             print("  [1] Reiniciar SBC (Reboot)")

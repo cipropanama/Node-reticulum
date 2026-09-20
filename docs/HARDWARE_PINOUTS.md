@@ -149,34 +149,42 @@ Dado que el protocolo **I2C es un bus compartido por direcciones**, puedes conec
                        │   [3.3V]  [GND]  [SDA]  [SCL]│
                        └─────┬───────┬──────┬──────┬──┘
                              │       │      │      │  (Bus I2C Compartido)
-              ┌──────────────┴───────┼──────┴──────┼─────────────┐
-              │                      │             │             │
-              ▼                      ▼             ▼             ▼
-      ┌───────────────┐                    ┌───────────────┐
-      │ Módulo INA219 │                    │ Módulo BME280 │
-      │  (Dir: 0x40)  │                    │(Dir: 0x76/0x77│
-      │Batería / Solar│                    │Presión y Clima│
-      └───────────────┘                    └───────────────┘
+              ┌──────────────┴───────┼──────┴──────┼───────────────────────────┐
+              │                      │             │                           │
+              ▼                      ▼             ▼                           ▼
+      ┌───────────────┐      ┌───────────────┐                    ┌─────────────────┐
+      │ Módulo INA219 │      │ Módulo BME280 │                    │ Módulo RTC I2C  │
+      │  (Dir: 0x40)  │      │(Dir: 0x76/0x77│                    │ DS3231 / DS1307 │
+      │Batería / Solar│      │Presión y Clima│                    │   (Dir: 0x68)   │
+      └───────────────┘      └───────────────┘                    └─────────────────┘
 ```
 
 ---
 
-### B. Verificación de Ambos Sensores en el Bus
+### B. Verificación de los Sensores y Reloj RTC en el Bus
 
 Ejecuta en la terminal:
 ```bash
 sudo i2cdetect -y 1
 ```
 
-Si ambos sensores están conectados correctamente, verás ambas direcciones activas al mismo tiempo:
-- **`40`**: Módulo sensor de Batería Solar INA219.
+En la matriz verás las 3 direcciones I2C activas de forma concurrente:
+- **`40`**: Sensor de Batería Solar INA219.
+- **`68`**: Reloj en tiempo real por hardware RTC DS3231 (Sincronización de hora offline).
 - **`76`** o **`77`**: Sensor barométrico y ambiental BME280 / BMP280.
-
-El software detectará ambos automáticamente y publicará la presión barométrica y el pronóstico de tormenta en la página NomadNet y en el menú `sudo rns-admin` -> Opción `[7]`.
 
 ---
 
-## 5. Recomendaciones de Energía para Despliegues Remotos
+## 5. Conexión de Módulo GPS (Opcional - Sincronización UTC y Coordenadas)
+
+Para nodos móviles o vehiculares, se puede conectar un receptor GPS (u-blox NEO-6M / Quectel):
+- **Por USB:** Plug & Play en `/dev/ttyUSB1` o `/dev/ttyACM0`.
+- **Por UART:** Conectar `TX_GPS` a `RX_SBC`, `VCC` a `3.3V/5V` y `GND` a `GND`.
+- El servicio `rns-timesync` sincroniza la hora UTC con los satélites y guarda las coordenadas en `/etc/reticulum-node/gps.json` automáticamente.
+
+---
+
+## 6. Recomendaciones de Energía para Despliegues Remotos
 
 1. **Protección contra bajadas de tensión (Brownout):** Los transmisores LoRa pueden tener picos de consumo durante la transmisión. Coloque un condensador electrolítico de `100uF - 470uF` entre VCC y GND del transceptor si observa reinicios espontáneos.
 2. **Sistema de Respaldo Solar:** Panel solar de 20W - 50W con controlador MPPT y batería LiFePO4 de 12V con conversor reductor (Step-down) de alta eficiencia a 5.1V.

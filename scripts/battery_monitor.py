@@ -124,6 +124,8 @@ def get_battery_status():
         "status_str": "No instalado (Opcional)"
     }
 
+get_battery_info = get_battery_status
+
 if __name__ == "__main__":
     st = get_battery_status()
     if len(sys.argv) > 1 and sys.argv[1] == "--json":

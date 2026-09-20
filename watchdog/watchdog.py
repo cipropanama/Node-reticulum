@@ -18,8 +18,16 @@ import logging
 
 LOG_FILE = "/var/log/reticulum-watchdog.log"
 CONFIG_FILE = "/etc/reticulum-node/node.json"
-MAX_FAILURES_BEFORE_REBOOT = 5
-FAILURE_COUNTER_FILE = "/var/run/reticulum_watchdog_failures"
+FAILURE_COUNTER_FILE = "/var/run/reticulum_watchdog_failures" if os.access("/var/run", os.W_OK) else "/tmp/reticulum_watchdog_failures"
+SCRIPT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../scripts")
+if os.path.exists(SCRIPT_DIR):
+    sys.path.insert(0, SCRIPT_DIR)
+try:
+    import battery_monitor
+    import power_save
+except ImportError:
+    battery_monitor = None
+    power_save = None
 
 # Setup logging
 logging.basicConfig(
@@ -133,6 +141,28 @@ def check_serial_interfaces():
         logging.warning(f"Error al verificar puertos serie: {e}")
     return True
 
+MAX_FAILURES_BEFORE_REBOOT = 5
+
+def check_battery_survival_mode():
+    """Monitors battery voltage; activates extreme power saving if critically low."""
+    if not battery_monitor:
+        return
+    try:
+        func = getattr(battery_monitor, "get_battery_status", getattr(battery_monitor, "get_battery_info", None))
+        if func:
+            bat = func()
+            if bat and bat.get("voltage"):
+                v = bat["voltage"]
+                # If 12V LiFePO4 battery drops below 11.6V or percentage < 15%
+                if v < 11.6 or (bat.get("percentage") and bat["percentage"] < 15):
+                    logging.warning(f"⚠️ BATERÍA CRÍTICA ({v}V / {bat.get('percentage')}%). Activando MODO SUPERVIVENCIA ENERGÉTICA...")
+                    if power_save:
+                        power_save.apply_low_power_profile()
+                elif v > 12.6:
+                    logging.info(f"Nivel de batería óptimo ({v}V / {bat.get('percentage')}%).")
+    except Exception as e:
+        logging.warning(f"Error al verificar estado de batería para supervivencia: {e}")
+
 def trigger_controlled_reboot():
     """Performs a safe synchronized reboot of the node to recover from severe lockups."""
     logging.critical("LÍMITE DE FALLOS ALCANZADO. Iniciando reinicio preventivo del nodo para recuperar conectividad...")
@@ -165,7 +195,10 @@ def run_health_check():
         logging.warning("Dispositivo RNode/Módem ausente. Intentando reiniciar rnsd tras comprobación...")
         # Don't mark as fatal immediately, but log it
 
-    # 4. Update Telemetry Pages
+    # 4. Check Battery & Survival Mode
+    check_battery_survival_mode()
+
+    # 5. Update Telemetry Pages
     try:
         update_script = "/usr/local/bin/reticulum-telemetry"
         if os.path.exists(update_script):
