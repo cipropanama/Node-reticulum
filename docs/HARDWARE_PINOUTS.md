@@ -57,7 +57,7 @@ Si se conecta un módulo transceptor LoRa UART directo (o microcontrolador RNode
 Los módulos **INA219** (monitor de batería solar), **BME280/BMP280** (barómetro y clima) y **DS3231** (reloj en tiempo real RTC para sincronización offline) funcionan simultáneamente conectados **en paralelo al mismo bus I2C (Pines 1, 3, 5 y 6)** del microcomputador sin interferencias.
 
 <p align="center">
-  <img src="img/i2c_sensors_wiring.jpg" alt="Diagrama de Conexión de Sensores I2C en Paralelo, RTC DS3231, Batería Solar y SBC" width="850" style="max-width:100%; border-radius:8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+  <img src="img/esquema_conexion_rpi_zero_i2c.jpg" alt="Diagrama de Conexión de Sensores I2C en Paralelo, RTC DS3231, Batería Solar y SBC" width="850" style="max-width:100%; border-radius:8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
   <br>
   <em>Diagrama de conexión completo: Batería Solar 12V, Regulador Step-Down 5V, Raspberry Pi Zero W, Radio LoRa RNode y los 3 módulos I2C en paralelo (INA219 0x40, BME280 0x76 y RTC DS3231 0x68).</em>
 </p>
