@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Generador Maestro del Diagrama de Conexionado Eléctrico Compacto y Elegante
+Generador Maestro del Diagrama de Conexionado Eléctrico Realista y Fiel al Hardware Físico
 CIPRO Panamá — Proyecto Reticulum Emergency Mesh Node
 (https://www.cipropanama.org)
 """
@@ -11,7 +11,6 @@ import subprocess
 from PIL import Image
 
 def generate_schematic():
-    # Dimensiones elegantes: 1800 x 1120 px
     svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1120" width="1800" height="1120" style="background:#070d18; font-family:'Segoe UI', Inter, -apple-system, Roboto, Helvetica, sans-serif;">
   <defs>
     <!-- Background Grid -->
@@ -27,50 +26,82 @@ def generate_schematic():
       <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.7"/>
     </filter>
 
-    <!-- Gradients -->
+    <!-- Metallic & Component Gradients -->
     <linearGradient id="header-grad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#0f172a"/>
       <stop offset="50%" stop-color="#1e293b"/>
       <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
 
+    <!-- Raspberry Pi PCB Green -->
     <linearGradient id="rpi-pcb" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#15803d"/>
       <stop offset="50%" stop-color="#166534"/>
       <stop offset="100%" stop-color="#14532d"/>
     </linearGradient>
 
-    <linearGradient id="blue-pcb" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Blue PCBs (INA219, LM2596, DS3231) -->
+    <linearGradient id="pcb-blue" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1d4ed8"/>
-      <stop offset="50%" stop-color="#1e40af"/>
-      <stop offset="100%" stop-color="#1e3a8a"/>
+      <stop offset="40%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#172554"/>
     </linearGradient>
 
-    <linearGradient id="purple-pcb" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Purple PCB (BME280) -->
+    <linearGradient id="pcb-purple" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#7e22ce"/>
-      <stop offset="100%" stop-color="#581c87"/>
+      <stop offset="50%" stop-color="#6b21a8"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
     </linearGradient>
 
-    <linearGradient id="dark-pcb" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Matte Black PCB (Heltec LoRa / ESP32) -->
+    <linearGradient id="pcb-black" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- Battery Casing -->
+    <linearGradient id="batt-case" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="30%" stop-color="#1e293b"/>
       <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
 
-    <linearGradient id="silver-metal" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="40%" stop-color="#cbd5e1"/>
+    <!-- Electrolytic Capacitor Cylinder Metal -->
+    <linearGradient id="cap-silver" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="35%" stop-color="#f8fafc"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
       <stop offset="100%" stop-color="#64748b"/>
     </linearGradient>
 
+    <!-- Gold Plated Terminals -->
     <linearGradient id="gold-metal" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fef08a"/>
-      <stop offset="60%" stop-color="#eab308"/>
+      <stop offset="50%" stop-color="#eab308"/>
       <stop offset="100%" stop-color="#a16207"/>
     </linearGradient>
 
+    <!-- Terminal Block Green -->
     <linearGradient id="terminal-green" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#16a34a"/>
-      <stop offset="100%" stop-color="#14532d"/>
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="50%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+
+    <!-- Trimmer Potentiometer Blue -->
+    <linearGradient id="trimmer-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="60%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+
+    <!-- Copper Coil Ring Gradient -->
+    <linearGradient id="copper-coil" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdba74"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
     </linearGradient>
   </defs>
 
@@ -93,48 +124,70 @@ def generate_schematic():
     <text x="1625" y="37" font-size="12" font-weight="bold" fill="#38bdf8" text-anchor="middle">CIPRO Panamá — www.cipropanama.org</text>
   </g>
 
-  <!-- ==================== 1. BATERÍA SOLAR 12V (TOP LEFT) ==================== -->
-  <!-- Box: 200 x 135 at (140, 85) -->
+  <!-- ====================================================================== -->
+  <!-- 1. BATERÍA SOLAR 12V LiFePO4 (REALISTA CON BORNES Y ETIQUETA TÉCNICA)  -->
+  <!-- ====================================================================== -->
   <g transform="translate(140, 85)" filter="url(#card-shadow)">
-    <rect width="200" height="135" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
-    <rect width="200" height="26" rx="8" fill="#0f172a"/>
-    <text x="100" y="18" font-size="11" font-weight="bold" fill="#f8fafc" text-anchor="middle">🔋 BATERÍA 12V</text>
-    <text x="100" y="44" font-size="10" fill="#94a3b8" text-anchor="middle">LiFePO4 12.8V</text>
+    <!-- Carcasa Robusta con Borde Superior -->
+    <rect width="200" height="135" rx="8" fill="url(#batt-case)" stroke="#475569" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="24" rx="8" fill="#0f172a"/>
+    <rect x="10" y="8" width="180" height="7" rx="3.5" fill="#334155"/> <!-- Asa de transporte abatible -->
 
-    <!-- Borne Negativo (-) -> Absolute X=195, Y=155 -->
-    <circle cx="55" cy="70" r="14" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
-    <text x="55" y="76" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">-</text>
+    <!-- Borne Negativo (-) [Negro con tornillo hexagonal] -> Absolute X=195, Y=155 -->
+    <circle cx="55" cy="70" r="16" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="55" cy="70" r="10" fill="#334155"/>
+    <polygon points="55,64 60,67 60,73 55,76 50,73 50,67" fill="#94a3b8"/>
     <text x="55" y="102" font-size="9" font-weight="bold" fill="#94a3b8" text-anchor="middle">GND (Masa)</text>
 
-    <!-- Borne Positivo (+) -> Absolute X=285, Y=155 -->
-    <circle cx="145" cy="70" r="14" fill="#dc2626" stroke="#fecaca" stroke-width="2"/>
-    <text x="145" y="76" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">+</text>
+    <!-- Borne Positivo (+) [Rojo con tornillo hexagonal] -> Absolute X=285, Y=155 -->
+    <circle cx="145" cy="70" r="16" fill="#dc2626" stroke="#fecaca" stroke-width="2"/>
+    <circle cx="145" cy="70" r="10" fill="#991b1b"/>
+    <polygon points="145,64 150,67 150,73 145,76 140,73 140,67" fill="#fca5a5"/>
     <text x="145" y="102" font-size="9" font-weight="bold" fill="#f87171" text-anchor="middle">+12V (DC)</text>
 
-    <text x="100" y="122" font-size="9" fill="#64748b" text-anchor="middle">Alimentación DC</text>
+    <!-- Etiqueta técnica LiFePO4 -->
+    <rect x="30" y="112" width="140" height="16" rx="3" fill="#020617" stroke="#334155" stroke-width="0.8"/>
+    <text x="100" y="124" font-size="8.5" font-weight="bold" fill="#38bdf8" text-anchor="middle">🔋 LiFePO4 12.8V / 12Ah</text>
   </g>
 
-  <!-- ==================== 2. SENSOR DE BATERÍA INA219 (TOP CENTER-LEFT) ==================== -->
-  <!-- Box: 220 x 135 at (380, 85) -->
+  <!-- ====================================================================== -->
+  <!-- 2. SENSOR INA219 (REALISTA CON RESISTENCIA SHUNT R100 Y BORNERA VERDE) -->
+  <!-- ====================================================================== -->
   <g transform="translate(380, 85)" filter="url(#card-shadow)">
-    <rect width="220" height="135" rx="8" fill="url(#blue-pcb)" stroke="#3b82f6" stroke-width="1.5"/>
-    <rect width="220" height="26" rx="8" fill="#1e3a8a"/>
-    <text x="110" y="18" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">⚡ INA219 (Dir: 0x40)</text>
+    <!-- Placa PCB Azul con orificios de montaje dorados -->
+    <rect width="220" height="135" rx="8" fill="url(#pcb-blue)" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="10" cy="10" r="4" fill="url(#gold-metal)"/>
+    <circle cx="210" cy="10" r="4" fill="url(#gold-metal)"/>
+    <circle cx="10" cy="125" r="4" fill="url(#gold-metal)"/>
+    <circle cx="210" cy="125" r="4" fill="url(#gold-metal)"/>
 
-    <!-- Bornera Shunt (VIN+ / VIN-) -->
-    <rect x="25" y="34" width="170" height="34" rx="4" fill="url(#terminal-green)" stroke="#22c55e" stroke-width="1"/>
+    <text x="110" y="18" font-size="10.5" font-weight="bold" fill="#ffffff" text-anchor="middle">⚡ INA219 (Dir: 0x40)</text>
+
+    <!-- Bornera Doble Verde con Tornillos de Ranura -->
+    <rect x="25" y="26" width="170" height="38" rx="4" fill="url(#terminal-green)" stroke="#16a34a" stroke-width="1"/>
     
     <!-- Tornillo VIN+ -> Absolute X=435, Y=136 -->
-    <circle cx="55" cy="51" r="10" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
-    <text x="55" y="55" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">+</text>
-    <text x="55" y="80" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">VIN+</text>
+    <circle cx="55" cy="51" r="11" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="2"/>
+    <line x1="47" y1="51" x2="63" y2="51" stroke="#fef08a" stroke-width="2.5"/>
+    <text x="55" y="78" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">VIN +</text>
 
     <!-- Tornillo VIN- -> Absolute X=545, Y=136 -->
-    <circle cx="165" cy="51" r="10" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
-    <text x="165" y="55" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">-</text>
-    <text x="165" y="80" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">VIN-</text>
+    <circle cx="165" cy="51" r="11" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="2"/>
+    <line x1="157" y1="51" x2="173" y2="51" stroke="#fef08a" stroke-width="2.5"/>
+    <text x="165" y="78" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">VIN -</text>
 
-    <!-- Pines Header I2C Inferiores (VCC, GND, SCL, SDA) -> Y_rel=115 -> Absolute Y=200 -->
+    <!-- Resistencia Shunt de Potencia R100 SMD -->
+    <rect x="95" y="38" width="30" height="18" rx="2" fill="#020617" stroke="#94a3b8" stroke-width="1"/>
+    <text x="110" y="51" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">R100</text>
+
+    <!-- Chip IC INA219 SOT-23 y condensadores SMD -->
+    <rect x="100" y="72" width="20" height="15" rx="1.5" fill="#020617" stroke="#475569"/>
+    <circle cx="104" cy="76" r="1.5" fill="#ffffff"/> <!-- Pin 1 dot -->
+    <text x="110" y="83" font-size="6" fill="#94a3b8" text-anchor="middle">219</text>
+    <rect x="80" y="74" width="8" height="10" fill="#a16207"/> <!-- Cap 0805 -->
+    <rect x="132" y="74" width="8" height="10" fill="#a16207"/>
+
+    <!-- Cabezal de 4 Pines I2C (Gold Pads) -> Y_rel=115 -> Absolute Y=200 -->
     <!-- VCC : Absolute X=415 -->
     <circle cx="35" cy="115" r="5.5" fill="#dc2626" stroke="#ffffff" stroke-width="1.2"/>
     <text x="35" y="103" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">VCC</text>
@@ -152,40 +205,65 @@ def generate_schematic():
     <text x="185" y="103" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">SDA</text>
   </g>
 
-  <!-- ==================== 3. STEP-DOWN LM2596 (TOP CENTER-RIGHT) ==================== -->
-  <!-- Box: 220 x 135 at (640, 85) -->
+  <!-- ====================================================================== -->
+  <!-- 3. STEP-DOWN LM2596 (REALISTA CON INDUCTOR TOROIDAL, POTENCIOMETRO Y CAPS)-->
+  <!-- ====================================================================== -->
   <g transform="translate(640, 85)" filter="url(#card-shadow)">
-    <rect width="220" height="135" rx="8" fill="url(#blue-pcb)" stroke="#1d4ed8" stroke-width="1.5"/>
-    <rect width="220" height="26" rx="8" fill="#172554"/>
-    <text x="110" y="18" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">🎛️ STEP-DOWN LM2596</text>
+    <!-- PCB Azul con 4 orificios -->
+    <rect width="220" height="135" rx="8" fill="url(#pcb-blue)" stroke="#1d4ed8" stroke-width="1.5"/>
+    <circle cx="10" cy="10" r="4" fill="url(#gold-metal)"/>
+    <circle cx="210" cy="10" r="4" fill="url(#gold-metal)"/>
+    <circle cx="10" cy="125" r="4" fill="url(#gold-metal)"/>
+    <circle cx="210" cy="125" r="4" fill="url(#gold-metal)"/>
+    <text x="110" y="18" font-size="10.5" font-weight="bold" fill="#ffffff" text-anchor="middle">🎛️ STEP-DOWN LM2596</text>
 
-    <!-- Potenciómetro e Inductor -->
-    <rect x="85" y="38" width="50" height="30" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
-    <circle cx="110" cy="53" r="6" fill="url(#gold-metal)"/>
-    <rect x="85" y="75" width="50" height="45" rx="3" fill="#0f172a" stroke="#334155"/>
-    <text x="110" y="101" font-size="9" font-weight="bold" fill="#94a3b8" text-anchor="middle">330 uH</text>
+    <!-- Potenciómetro Multivuelta Azul Bourns con tornillo de ajuste de latón -->
+    <rect x="75" y="28" width="55" height="26" rx="2" fill="url(#trimmer-blue)" stroke="#38bdf8" stroke-width="0.8"/>
+    <circle cx="115" cy="41" r="5" fill="url(#gold-metal)" stroke="#713f12" stroke-width="0.8"/>
+    <line x1="112" y1="41" x2="118" y2="41" stroke="#0f172a" stroke-width="1.5"/>
+    <text x="90" y="44" font-size="7" font-weight="bold" fill="#ffffff">W103</text>
 
-    <!-- Terminales Entrada (Izquierda) -->
+    <!-- Inductor de Potencia 330uH Blindado (Cuerpo Circular/Cuadrado Negro) -->
+    <rect x="75" y="60" width="55" height="42" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="102" cy="81" r="16" fill="url(#copper-coil)" stroke="#7c2d12" stroke-width="1"/>
+    <circle cx="102" cy="81" r="9" fill="#0f172a"/>
+    <text x="102" y="84" font-size="7.5" font-weight="bold" fill="#ffffff" text-anchor="middle">330</text>
+
+    <!-- Condensadores Electrolíticos Radiales de Aluminio (Cilíndricos) -->
+    <!-- Cap Entrada -->
+    <circle cx="50" cy="68" r="14" fill="url(#cap-silver)" stroke="#475569" stroke-width="1"/>
+    <path d="M 38 58 A 14 14 0 0 0 38 78 Z" fill="#1e293b"/> <!-- Franja negativa -->
+    <text x="38" y="71" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">-</text>
+
+    <!-- Cap Salida -->
+    <circle cx="155" cy="68" r="14" fill="url(#cap-silver)" stroke="#475569" stroke-width="1"/>
+    <path d="M 167 58 A 14 14 0 0 1 167 78 Z" fill="#1e293b"/> <!-- Franja negativa -->
+    <text x="167" y="71" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">-</text>
+
+    <!-- Pads de Entrada (Izquierda) -->
     <!-- IN- : Absolute X=660, Y=135 -->
-    <circle cx="20" cy="50" r="7" fill="#0f172a" stroke="#ffffff" stroke-width="1.2"/>
-    <text x="34" y="54" font-size="8.5" font-weight="bold" fill="#ffffff">IN-</text>
+    <circle cx="20" cy="50" r="7" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
+    <text x="34" y="54" font-size="8.5" font-weight="bold" fill="#ffffff">IN -</text>
 
     <!-- IN+ : Absolute X=660, Y=180 -->
-    <circle cx="20" cy="95" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="1.2"/>
-    <text x="34" y="99" font-size="8.5" font-weight="bold" fill="#ffffff">IN+</text>
+    <circle cx="20" cy="95" r="7" fill="#dc2626" stroke="url(#gold-metal)" stroke-width="1.5"/>
+    <text x="34" y="99" font-size="8.5" font-weight="bold" fill="#ffffff">IN +</text>
 
-    <!-- Terminales Salida (Derecha) -->
+    <!-- Pads de Salida (Derecha) -->
     <!-- OUT- (GND) : Absolute X=840, Y=135 -->
-    <circle cx="200" cy="50" r="7" fill="#0f172a" stroke="#ffffff" stroke-width="1.2"/>
-    <text x="186" y="54" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="end">OUT-</text>
+    <circle cx="200" cy="50" r="7" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
+    <text x="186" y="54" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="end">OUT -</text>
 
     <!-- OUT+ (5.1V) : Absolute X=840, Y=180 -->
-    <circle cx="200" cy="95" r="7" fill="#ea580c" stroke="#ffffff" stroke-width="1.2"/>
+    <circle cx="200" cy="95" r="7" fill="#ea580c" stroke="url(#gold-metal)" stroke-width="1.5"/>
     <text x="186" y="99" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="end">5.1V</text>
+
+    <text x="110" y="122" font-size="8.5" fill="#93c5fd" text-anchor="middle">Salida Regulada 5.1V</text>
   </g>
 
-  <!-- ==================== 4. TARJETA RESUMEN DE FLUJO DE POTENCIA (TOP RIGHT) ==================== -->
-  <!-- Box: 770 x 135 at (900, 85) -->
+  <!-- ====================================================================== -->
+  <!-- 4. TARJETA RESUMEN DE POTENCIA                                         -->
+  <!-- ====================================================================== -->
   <g transform="translate(900, 85)" filter="url(#card-shadow)">
     <rect width="770" height="135" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
     <rect width="770" height="26" rx="8" fill="#0f172a"/>
@@ -210,8 +288,9 @@ def generate_schematic():
     </g>
   </g>
 
-  <!-- ==================== 5. RASPBERRY PI ZERO W (MIDDLE LEFT) ==================== -->
-  <!-- Box: 680 x 270 at (140, 270) -->
+  <!-- ====================================================================== -->
+  <!-- 5. RASPBERRY PI ZERO W (SE CONSERVA TAL COMO PIDIÓ EL USUARIO)         -->
+  <!-- ====================================================================== -->
   <g transform="translate(140, 270)" filter="url(#card-shadow)">
     <!-- Base PCB -->
     <rect width="680" height="270" rx="14" fill="url(#rpi-pcb)" stroke="#22c55e" stroke-width="2"/>
@@ -290,28 +369,60 @@ def generate_schematic():
     </g>
   </g>
 
-  <!-- ==================== 6. MÓDULO RNODE LORA ESP32 (MIDDLE RIGHT) ==================== -->
-  <!-- Box: 770 x 270 at (900, 270) -->
+  <!-- ====================================================================== -->
+  <!-- 6. TRANSCEPTOR LORA RNODE (HELTEC LORA32 / ESP32 REALISTA)             -->
+  <!-- ====================================================================== -->
   <g transform="translate(900, 270)" filter="url(#card-shadow)">
-    <rect width="770" height="270" rx="14" fill="url(#dark-pcb)" stroke="#475569" stroke-width="2"/>
-    <rect width="770" height="28" rx="14" fill="#0f172a"/>
-    <text x="385" y="19" font-size="11.5" font-weight="bold" fill="#38bdf8" text-anchor="middle">📡 TRANSCEPTOR LORA RNODE (ESP32 / HELTEC / T-BEAM)</text>
+    <!-- PCB Negro Mate Estilo Heltec LoRa32 -->
+    <rect width="770" height="270" rx="14" fill="url(#pcb-black)" stroke="#475569" stroke-width="2"/>
+    <circle cx="15" cy="15" r="7" fill="url(#gold-metal)"/>
+    <circle cx="755" cy="15" r="7" fill="url(#gold-metal)"/>
+    <circle cx="15" cy="255" r="7" fill="url(#gold-metal)"/>
+    <circle cx="755" cy="255" r="7" fill="url(#gold-metal)"/>
 
-    <!-- Pantalla OLED 0.96" -->
-    <rect x="250" y="50" width="220" height="125" rx="6" fill="#020617" stroke="#38bdf8" stroke-width="1.5"/>
-    <rect x="260" y="58" width="200" height="109" fill="#000000"/>
-    <text x="360" y="82" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">RETICULUM RNODE</text>
-    <text x="360" y="104" font-size="10" fill="#22c55e" text-anchor="middle">915.000 MHz (SF8 / BW 125)</text>
-    <text x="360" y="124" font-size="10" fill="#f8fafc" text-anchor="middle">TX: 20 dBm | SNR: +8 dB</text>
-    <text x="360" y="145" font-size="9" fill="#94a3b8" text-anchor="middle">CIPRO Rescue Mesh Node</text>
+    <text x="385" y="24" font-size="12" font-weight="bold" fill="#38bdf8" text-anchor="middle">📡 HELTEC WIFI LORA 32 V2 (ESP32 / SX1276) — RETICULUM RNODE</text>
 
-    <!-- Conector SMA y Antena -->
-    <rect x="630" y="70" width="35" height="26" rx="2" fill="url(#gold-metal)" stroke="#a16207"/>
-    <path d="M 665 83 L 720 83 L 720 35" stroke="#0f172a" stroke-width="6" fill="none"/>
-    <rect x="712" y="-20" width="16" height="60" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-    <text x="720" y="-28" font-size="9" font-weight="bold" fill="#38bdf8" text-anchor="middle">ANTENA</text>
+    <!-- Pantalla OLED 0.96" I2C Montada con Cristal y Marco Realista -->
+    <rect x="230" y="45" width="240" height="135" rx="6" fill="#020617" stroke="#334155" stroke-width="2"/>
+    <rect x="242" y="53" width="216" height="119" rx="2" fill="#000000"/>
+    <text x="350" y="78" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">RETICULUM RNODE</text>
+    <text x="350" y="100" font-size="10" fill="#22c55e" text-anchor="middle">915.000 MHz (SF8 / BW 125)</text>
+    <text x="350" y="120" font-size="10" fill="#f8fafc" text-anchor="middle">TX: 20 dBm | SNR: +8 dB</text>
+    <text x="350" y="140" font-size="9" fill="#94a3b8" text-anchor="middle">CIPRO Emergency Mesh Node</text>
 
-    <!-- Pines UART + ALIMENTACIÓN (Lateral Izquierdo) -->
+    <!-- Blindaje Metálico RF ESP32 (ESP-WROOM-32) -->
+    <rect x="90" y="55" width="105" height="120" rx="4" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="142" y="95" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">ESP-WROOM-32</text>
+    <text x="142" y="115" font-size="8" font-weight="500" fill="#334155" text-anchor="middle">WiFi + BT + LoRa</text>
+    <text x="142" y="132" font-size="7" fill="#64748b" text-anchor="middle">FCC ID: 2AC7Z-ESPWROOM32</text>
+
+    <!-- Pulsadores Micro SMD (RST y PRG) -->
+    <rect x="95" y="195" width="20" height="15" rx="2" fill="#020617" stroke="#64748b"/>
+    <circle cx="105" cy="202" r="4" fill="url(#silver-metal)"/>
+    <text x="105" y="222" font-size="7.5" font-weight="bold" fill="#94a3b8" text-anchor="middle">RST</text>
+
+    <rect x="135" y="195" width="20" height="15" rx="2" fill="#020617" stroke="#64748b"/>
+    <circle cx="145" cy="202" r="4" fill="url(#silver-metal)"/>
+    <text x="145" y="222" font-size="7.5" font-weight="bold" fill="#94a3b8" text-anchor="middle">PRG</text>
+
+    <!-- LEDs Indicadores SMD (Power & LoRa Activity) -->
+    <circle cx="190" cy="202" r="3.5" fill="#ef4444"/>
+    <text x="190" y="222" font-size="7" fill="#f87171" text-anchor="middle">PWR</text>
+    <circle cx="215" cy="202" r="3.5" fill="#22c55e"/>
+    <text x="215" y="222" font-size="7" fill="#4ade80" text-anchor="middle">TX/RX</text>
+
+    <!-- Conector Coaxial SMA Dorado y Antena Dipolo 915MHz -->
+    <rect x="550" y="70" width="45" height="35" rx="3" fill="url(#gold-metal)" stroke="#a16207" stroke-width="1.5"/>
+    <circle cx="572" cy="87" r="8" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
+    <path d="M 595 87 L 685 87 L 685 30" stroke="#0f172a" stroke-width="7" fill="none"/>
+    <rect x="675" y="-30" width="20" height="75" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <!-- Ranuras de goma de la antena -->
+    <line x1="675" y1="-15" x2="695" y2="-15" stroke="#334155" stroke-width="2"/>
+    <line x1="675" y1="-5" x2="695" y2="-5" stroke="#334155" stroke-width="2"/>
+    <line x1="675" y1="5" x2="695" y2="5" stroke="#334155" stroke-width="2"/>
+    <text x="685" y="-40" font-size="9" font-weight="bold" fill="#38bdf8" text-anchor="middle">ANTENA 915MHz</text>
+
+    <!-- Header de Conexión Lateral Izquierdo (Pines de Alimentación y UART) -->
     <!-- 5V / VCC : Absolute X=935, Y=325 -->
     <circle cx="35" cy="55" r="6.5" fill="#ea580c" stroke="#ffffff" stroke-width="1.5"/>
     <text x="50" y="59" font-size="10" font-weight="bold" fill="#ffffff">5V / VCC</text>
@@ -328,10 +439,12 @@ def generate_schematic():
     <circle cx="35" cy="190" r="6.5" fill="#eab308" stroke="#ffffff" stroke-width="1.5"/>
     <text x="50" y="194" font-size="10" font-weight="bold" fill="#ffffff">TX (a RX Pin 10)</text>
 
-    <text x="385" y="248" font-size="10" fill="#94a3b8" text-anchor="middle">Velocidad UART: 115200 Baudios (KISS Protocol / /dev/ttyAMA0)</text>
+    <text x="385" y="250" font-size="10.5" fill="#94a3b8" text-anchor="middle">Velocidad UART: 115200 Baudios (KISS Protocol / /dev/ttyAMA0)</text>
   </g>
 
-  <!-- ==================== 7. RIEL DISTRIBUIDOR I2C (Y=580 a 645) ==================== -->
+  <!-- ====================================================================== -->
+  <!-- 7. RIEL DISTRIBUIDOR I2C (BUS DE 4 HILOS)                              -->
+  <!-- ====================================================================== -->
   <g transform="translate(140, 580)" filter="url(#card-shadow)">
     <rect width="1530" height="68" rx="7" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     
@@ -358,14 +471,34 @@ def generate_schematic():
     <text x="1370" y="40" font-size="10.5" font-weight="bold" fill="#38bdf8">BUS I2C PARALELO DE 4 HILOS</text>
   </g>
 
-  <!-- ==================== 8. SENSORES I2C INFERIORES: BME280 Y DS3231 RTC ==================== -->
+  <!-- ====================================================================== -->
+  <!-- 8. SENSORES I2C INFERIORES: BME280 Y DS3231 RTC                        -->
+  <!-- ====================================================================== -->
 
-  <!-- 8.1 SENSOR BME280 / BMP280 (BOTTOM LEFT) -->
-  <!-- Box: 580 x 170 at (200, 680) -->
+  <!-- 8.1 SENSOR AMBIENTAL BME280 (PCB PÚRPURA CON SENSOR METÁLICO BOSCH)     -->
   <g transform="translate(200, 680)" filter="url(#card-shadow)">
-    <rect width="580" height="170" rx="10" fill="url(#purple-pcb)" stroke="#9333ea" stroke-width="1.5"/>
-    <rect width="580" height="26" rx="10" fill="#581c87"/>
-    <text x="290" y="18" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">🌦️ SENSOR BME280 / BMP280 (Dirección: 0x76)</text>
+    <!-- PCB Púrpura Clásico Bosch -->
+    <rect width="580" height="170" rx="10" fill="url(#pcb-purple)" stroke="#9333ea" stroke-width="1.5"/>
+    <circle cx="15" cy="15" r="5" fill="url(#gold-metal)"/>
+    <circle cx="565" cy="15" r="5" fill="url(#gold-metal)"/>
+    <circle cx="15" cy="155" r="5" fill="url(#gold-metal)"/>
+    <circle cx="565" cy="155" r="5" fill="url(#gold-metal)"/>
+
+    <text x="290" y="20" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">🌦️ SENSOR BME280 / BMP280 (Dirección I2C: 0x76)</text>
+
+    <!-- Sensor Metálico Bosch con orificio de presión atmosférica -->
+    <rect x="250" y="78" width="80" height="50" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+    <circle cx="265" cy="92" r="3" fill="#020617"/> <!-- Agujero de presión -->
+    <text x="295" y="98" font-size="10" font-weight="bold" fill="#0f172a">BOSCH</text>
+    <text x="290" y="118" font-size="8" font-weight="bold" fill="#475569" text-anchor="middle">BME280 MEMS</text>
+
+    <!-- Componentes SMD (Regulador LDO y MOSFET Level Shifter) -->
+    <rect x="175" y="85" width="22" height="16" rx="2" fill="#020617"/>
+    <text x="186" y="96" font-size="7" fill="#94a3b8" text-anchor="middle">662K</text>
+    <rect x="380" y="85" width="22" height="16" rx="2" fill="#020617"/>
+    <text x="391" y="96" font-size="7" fill="#94a3b8" text-anchor="middle">MOS</text>
+
+    <text x="290" y="152" font-size="10" fill="#f3e8ff" text-anchor="middle">Presión Atmosférica (hPa), Temp (°C), Humedad (%) — Alerta Tormentas</text>
 
     <!-- Pines Header I2C Superiores (VIN, GND, SCL, SDA) -> Y_rel=48 -> Absolute Y=728 -->
     <!-- VIN : Absolute X=300 -->
@@ -383,19 +516,40 @@ def generate_schematic():
     <!-- SDA : Absolute X=585 -->
     <circle cx="385" cy="48" r="6" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
     <text x="385" y="68" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">SDA</text>
-
-    <!-- Sensor Metálico Bosch -->
-    <rect x="265" y="90" width="50" height="36" rx="3" fill="url(#silver-metal)" stroke="#475569"/>
-    <text x="290" y="112" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">BOSCH</text>
-    <text x="290" y="150" font-size="9.5" fill="#f3e8ff" text-anchor="middle">Presión Atmosférica (hPa), Temp (°C), Humedad (%) — Alerta Tormentas</text>
   </g>
 
-  <!-- 8.2 RELOJ DE TIEMPO REAL DS3231 RTC (BOTTOM RIGHT) -->
-  <!-- Box: 580 x 170 at (980, 680) -->
+  <!-- 8.2 RELOJ DS3231 RTC (PCB AZUL ZS-042 CON PORTAPILAS CR2032 Y CHIP TCXO)-->
   <g transform="translate(980, 680)" filter="url(#card-shadow)">
-    <rect width="580" height="170" rx="10" fill="url(#blue-pcb)" stroke="#3b82f6" stroke-width="1.5"/>
-    <rect width="580" height="26" rx="10" fill="#1e3a8a"/>
-    <text x="290" y="18" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">🕒 RELOJ RTC DS3231 (Dirección: 0x68)</text>
+    <!-- PCB Azul Estilo ZS-042 -->
+    <rect width="580" height="170" rx="10" fill="url(#pcb-blue)" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="15" cy="15" r="5" fill="url(#gold-metal)"/>
+    <circle cx="565" cy="15" r="5" fill="url(#gold-metal)"/>
+    <circle cx="15" cy="155" r="5" fill="url(#gold-metal)"/>
+    <circle cx="565" cy="155" r="5" fill="url(#gold-metal)"/>
+
+    <text x="290" y="20" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">🕒 RELOJ RTC DS3231 (Dirección I2C: 0x68)</text>
+
+    <!-- Chip IC DS3231SN Realista (SOIC-16 con Oscilador TCXO Integrado) -->
+    <rect x="260" y="80" width="75" height="42" rx="3" fill="#020617" stroke="#475569" stroke-width="1.2"/>
+    <circle cx="268" cy="88" r="2" fill="#ffffff"/> <!-- Pin 1 dot -->
+    <text x="297" y="98" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">DALLAS</text>
+    <text x="297" y="112" font-size="8" fill="#38bdf8" text-anchor="middle">DS3231SN</text>
+
+    <!-- Chip Memoria EEPROM AT24C32 (SOIC-8) -->
+    <rect x="350" y="86" width="40" height="30" rx="2" fill="#020617" stroke="#475569"/>
+    <text x="370" y="104" font-size="7" fill="#94a3b8" text-anchor="middle">24C32</text>
+
+    <!-- Portapilas CR2032 de Metal con Batería Insertada -->
+    <circle cx="485" cy="110" r="32" fill="#0f172a" stroke="url(#gold-metal)" stroke-width="1.5"/>
+    <circle cx="485" cy="110" r="28" fill="url(#silver-metal)" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Grabado en la pila botón -->
+    <text x="485" y="105" font-size="9" font-weight="bold" fill="#0f172a" text-anchor="middle">CR2032</text>
+    <text x="485" y="118" font-size="7.5" font-weight="bold" fill="#dc2626" text-anchor="middle">+ 3V LITHIUM</text>
+
+    <!-- Texto explicativo despejado a la izquierda en 3 líneas -->
+    <text x="145" y="98" font-size="10" font-weight="bold" fill="#e0f2fe" text-anchor="middle">Oscilador TCXO DS3231</text>
+    <text x="145" y="114" font-size="8.5" fill="#93c5fd" text-anchor="middle">Compensado por Temperatura</text>
+    <text x="145" y="130" font-size="8" fill="#cbd5e1" text-anchor="middle">Sincroniza hora offline en Reticulum</text>
 
     <!-- Pines Header I2C Superiores (VCC, GND, SCL, SDA) -> Y_rel=48 -> Absolute Y=728 -->
     <!-- VCC : Absolute X=1080 -->
@@ -413,18 +567,11 @@ def generate_schematic():
     <!-- SDA : Absolute X=1365 -->
     <circle cx="385" cy="48" r="6" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
     <text x="385" y="68" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">SDA</text>
-
-    <!-- Soporte Pila Botón CR2032 -->
-    <circle cx="480" cy="115" r="28" fill="url(#silver-metal)" stroke="#64748b" stroke-width="2"/>
-    <text x="480" y="113" font-size="9.5" font-weight="bold" fill="#0f172a" text-anchor="middle">CR2032</text>
-    <text x="480" y="126" font-size="8" fill="#334155" text-anchor="middle">3V Litio</text>
-
-    <text x="210" y="110" font-size="10" fill="#e0f2fe">Oscilador TCXO de Alta Precisión</text>
-    <text x="210" y="128" font-size="9.5" fill="#93c5fd">Sincroniza hora offline en Reticulum</text>
   </g>
 
-  <!-- ==================== 9. TABLA DE REFERENCIA RÁPIDA (FOOTER) ==================== -->
-  <!-- Box: 1530 x 160 at (140, 885) -->
+  <!-- ====================================================================== -->
+  <!-- 9. TABLA DE REFERENCIA RÁPIDA (FOOTER)                                 -->
+  <!-- ====================================================================== -->
   <g transform="translate(140, 885)" filter="url(#card-shadow)">
     <rect width="1530" height="160" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <rect width="1530" height="26" rx="8" fill="#1e293b"/>
@@ -460,7 +607,9 @@ def generate_schematic():
     </g>
   </g>
 
-  <!-- ==================== CABLEADO ULTRA-LIMPIO POR CALLEJONES ==================== -->
+  <!-- ====================================================================== -->
+  <!-- CABLEADO ULTRA-LIMPIO POR CALLEJONES (CONEXIONES 100% EXACTAS)         -->
+  <!-- ====================================================================== -->
   <g filter="url(#wire-glow)">
     
     <!-- 1. POTENCIA 12V -->
@@ -606,7 +755,7 @@ def generate_schematic():
     with open(svg_file, "w", encoding="utf-8") as f:
         f.write(svg_content)
 
-    print("Renderizando esquema compacto con Chromium headless (1800x1120)...")
+    print("Renderizando esquema hiper-realista con Chromium headless (1800x1120)...")
     subprocess.run([
         "chromium", "--headless", "--disable-gpu",
         f"--screenshot={png_file}",
