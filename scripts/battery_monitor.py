@@ -69,11 +69,26 @@ def read_ina219_sensor():
         for addr in ina_addresses:
             try:
                 # Read Bus Voltage Register (Register 0x02)
-                raw = bus.read_word_data(addr, 0x02)
-                # Swap bytes (INA219 is Big Endian)
-                raw_be = ((raw & 0xFF) << 8) | ((raw >> 8) & 0xFF)
-                voltage_mv = (raw_be >> 3) * 4
+                raw_v = bus.read_word_data(addr, 0x02)
+                raw_v_be = ((raw_v & 0xFF) << 8) | ((raw_v >> 8) & 0xFF)
+                voltage_mv = (raw_v_be >> 3) * 4
                 voltage = round(voltage_mv / 1000.0, 2)
+
+                # Try reading Shunt Voltage Register (Register 0x01)
+                current_ma = 0.0
+                power_mw = 0.0
+                try:
+                    raw_s = bus.read_word_data(addr, 0x01)
+                    raw_s_be = ((raw_s & 0xFF) << 8) | ((raw_s >> 8) & 0xFF)
+                    # Signed 16-bit
+                    if raw_s_be > 32767:
+                        raw_s_be -= 65536
+                    shunt_mv = raw_s_be * 0.01 # 10 uV per LSB -> 0.01 mV
+                    # Assuming Rshunt = 0.1 Ohm (Standard INA219 breakout): I (mA) = Vshunt (mV) / 0.1 Ohm = Vshunt * 10
+                    current_ma = round(shunt_mv * 10.0, 1)
+                    power_mw = round(abs(voltage * current_ma), 1)
+                except Exception:
+                    pass
 
                 if voltage > 0.5:
                     # Estimate percentage for typical 12V Lead-Acid / LiFePO4 or 3.7V Li-ion
@@ -84,14 +99,18 @@ def read_ina219_sensor():
                     else:
                         pct = 50
 
+                    status_str = f"{voltage}V ({pct}%)"
+                    if current_ma != 0.0:
+                        status_str += f" | {current_ma:+.0f}mA ({power_mw/1000.0:.2f}W)"
+
                     return {
                         "detected": True,
                         "type": f"INA219 (I2C Bus {b}, 0x{addr:02x})",
                         "voltage": voltage,
-                        "current_ma": 0.0,
-                        "power_mw": 0.0,
+                        "current_ma": current_ma,
+                        "power_mw": power_mw,
                         "percentage": pct,
-                        "status_str": f"{voltage}V ({pct}%)"
+                        "status_str": status_str
                     }
             except Exception:
                 pass
