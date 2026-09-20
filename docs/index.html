@@ -486,6 +486,11 @@
             <td>Conexión directa por cable USB o pines UART GPIO.</td>
           </tr>
           <tr>
+            <td><strong>Sensor de Batería</strong></td>
+            <td>Módulo INA219 (I2C)</td>
+            <td>Medición de 0-26V de batería solar/LiFePO4 y telemetría.</td>
+          </tr>
+          <tr>
             <td><strong>Módem Analógico</strong></td>
             <td>TNC KISS por USB / Serie</td>
             <td>Para enlazar con radios VHF/UHF de radioaficionados.</td>
@@ -497,6 +502,13 @@
           </tr>
         </tbody>
       </table>
+
+      <div style="text-align: center; margin: 2.5rem 0 1rem 0;">
+        <img src="img/ina219_wiring.jpg" alt="Diagrama de Conexión INA219 y Batería Solar" style="width: 100%; max-width: 850px; border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.6rem;">
+          <em>Esquema de conexionado: Batería 12V LiFePO4, Sensor INA219 (I2C), Regulador Step-Down, SBC Raspberry Pi Zero y RNode LoRa.</em>
+        </p>
+      </div>
     </section>
 
     <!-- Section: Ecosistema CIPRO -->

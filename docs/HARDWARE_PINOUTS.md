@@ -56,6 +56,12 @@ Si se conecta un módulo transceptor LoRa UART directo (o microcontrolador RNode
 
 El sensor **INA219** permite medir con alta precisión el voltaje real (0 a 26V DC) y la corriente de la batería solar o banco de 12V/LiFePO4, publicando los datos en la telemetría pública de NomadNet.
 
+<p align="center">
+  <img src="img/ina219_wiring.jpg" alt="Diagrama de Conexión Sensor INA219 y Batería Solar" width="850" style="max-width:100%; border-radius:8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+  <br>
+  <em>Diagrama de conexión: Batería Solar 12V, Sensor INA219, Regulador Step-Down 5V, MicroPC SBC y Radio LoRa RNode.</em>
+</p>
+
 ### A. Pines Lógicos I2C (Hacia el SBC)
 
 Conecta los 4 pines de control del módulo INA219 a los pines GPIO de tu microcomputador:
