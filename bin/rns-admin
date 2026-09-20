@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Reticulum Emergency Node - Operator Control Panel & Management Console
+Auspiciado por Cipropanama.org - https://cipropanama.org
+"""
+
+import os
+import sys
+import time
+import subprocess
+import json
+import shutil
+
+# Locate scripts
+BIN_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BIN_DIR) if os.path.basename(BIN_DIR) == "bin" else "/opt/reticulum-node"
+SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
+if not os.path.exists(SCRIPTS_DIR):
+    SCRIPTS_DIR = "/opt/reticulum-node/scripts"
+
+sys.path.insert(0, SCRIPTS_DIR)
+try:
+    import hardware_detect
+except ImportError:
+    hardware_detect = None
+
+# ANSI Colors
+C_RESET = "\033[0m"
+C_BOLD = "\033[1m"
+C_CYAN = "\033[36m"
+C_GREEN = "\033[32m"
+C_YELLOW = "\033[33m"
+C_RED = "\033[31m"
+C_MAGENTA = "\033[35m"
+
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+def print_header():
+    print(f"{C_CYAN}{C_BOLD}")
+    print("╔════════════════════════════════════════════════════════════════════════════╗")
+    print("║            🌐 PANEL DE CONTROL - NODO DE EMERGENCIA RETICULUM              ║")
+    print("║                   Auspiciado por Cipropanama.org                           ║")
+    print("║                      https://cipropanama.org                               ║")
+    print("╚════════════════════════════════════════════════════════════════════════════╝")
+    print(f"{C_RESET}")
+
+def pause():
+    input(f"\n{C_BOLD}Presione [ENTER] para volver al menú principal...{C_RESET}")
+
+def show_status():
+    clear_screen()
+    print_header()
+    print(f"{C_MAGENTA}{C_BOLD}=== 📊 ESTADO DEL SISTEMA Y TELEMETRÍA ==={C_RESET}\n")
+    if hardware_detect:
+        stats = hardware_detect.get_system_stats()
+        print(f"{C_BOLD}Hardware SBC:{C_RESET}     {stats['model']} ({stats['arch']})")
+        print(f"{C_BOLD}Temp. CPU:{C_RESET}        {stats['cpu_temp']}°C" if stats['cpu_temp'] else "Temp. CPU:        N/D")
+        print(f"{C_BOLD}Uptime:{C_RESET}           {stats['uptime']}")
+        print(f"{C_BOLD}Memoria RAM:{C_RESET}      {stats['ram_used_mb']} MB / {stats['ram_total_mb']} MB ({stats['ram_percent']}%)")
+        print(f"{C_BOLD}Uso de Disco (/):{C_RESET} {stats['disk_used_percent']}%")
+        print(f"{C_BOLD}Carga CPU:{C_RESET}        {stats['load_avg']}")
+    
+    print(f"\n{C_MAGENTA}{C_BOLD}=== 📡 ESTADO DE RETICULUM NETWORK STACK (rnstatus) ==={C_RESET}\n")
+    try:
+        subprocess.run(["rnstatus"])
+    except Exception:
+        print(f"{C_YELLOW}rnstatus no disponible o demonio detenido.{C_RESET}")
+
+    print(f"\n{C_MAGENTA}{C_BOLD}=== ⚙️ ESTADO DE SERVICIOS SYSTEMD ==={C_RESET}")
+    for s in ["rnsd", "nomadnet", "rns-watchdog.timer"]:
+        try:
+            res = subprocess.run(["systemctl", "is-active", s], capture_output=True, text=True)
+            status = res.stdout.strip()
+            color = C_GREEN if status == "active" else C_RED
+            print(f" • Servicio {s:20}: {color}{status.upper()}{C_RESET}")
+        except Exception:
+            pass
+    pause()
+
+def run_wizard():
+    wizard_path = os.path.join(SCRIPTS_DIR, "rns_wizard.py")
+    if os.path.exists(wizard_path):
+        subprocess.run([sys.executable, wizard_path])
+    else:
+        print(f"{C_RED}No se encontró el script del asistente en {wizard_path}{C_RESET}")
+        pause()
+
+def view_logs():
+    clear_screen()
+    print_header()
+    print(f"{C_BOLD}Seleccione el registro (log) que desea inspeccionar:{C_RESET}")
+    print("  [1] Log de Reticulum (rnsd)")
+    print("  [2] Log de NomadNet")
+    print("  [3] Log del Watchdog y Autoreparación")
+    print("  [4] Volver")
+    
+    opt = input(f"\nOpción [1-4]: ").strip()
+    if opt == "1":
+        subprocess.run(["journalctl", "-u", "rnsd", "-n", "50", "--no-pager"])
+        pause()
+    elif opt == "2":
+        subprocess.run(["journalctl", "-u", "nomadnet", "-n", "50", "--no-pager"])
+        pause()
+    elif opt == "3":
+        if os.path.exists("/var/log/reticulum-watchdog.log"):
+            subprocess.run(["tail", "-n", "50", "/var/log/reticulum-watchdog.log"])
+        else:
+            subprocess.run(["journalctl", "-u", "rns-watchdog", "-n", "50", "--no-pager"])
+        pause()
+
+def manage_services():
+    clear_screen()
+    print_header()
+    print(f"{C_BOLD}Gestión de Servicios:{C_RESET}")
+    print("  [1] Reiniciar todos los servicios (rnsd, nomadnet, watchdog)")
+    print("  [2] Detener todos los servicios")
+    print("  [3] Iniciar todos los servicios")
+    print("  [4] Actualizar páginas y telemetría de NomadNet manualmente")
+    print("  [5] Volver")
+    
+    opt = input(f"\nOpción [1-5]: ").strip()
+    if opt == "1":
+        print(f"{C_CYAN}Reiniciando servicios...{C_RESET}")
+        subprocess.run(["systemctl", "restart", "rnsd", "nomadnet", "rns-watchdog.timer"])
+        print(f"{C_GREEN}✓ Servicios reiniciados.{C_RESET}")
+        pause()
+    elif opt == "2":
+        print(f"{C_YELLOW}Deteniendo servicios...{C_RESET}")
+        subprocess.run(["systemctl", "stop", "rnsd", "nomadnet"])
+        print(f"{C_GREEN}✓ Servicios detenidos.{C_RESET}")
+        pause()
+    elif opt == "3":
+        print(f"{C_CYAN}Iniciando servicios...{C_RESET}")
+        subprocess.run(["systemctl", "start", "rnsd", "nomadnet", "rns-watchdog.timer"])
+        print(f"{C_GREEN}✓ Servicios iniciados.{C_RESET}")
+        pause()
+    elif opt == "4":
+        up_script = os.path.join(SCRIPTS_DIR, "update_telemetry.py")
+        subprocess.run([sys.executable, up_script])
+        pause()
+
+def backup_restore_identity():
+    clear_screen()
+    print_header()
+    print(f"{C_BOLD}Gestión de Identidades Criptográficas y Copias de Seguridad:{C_RESET}")
+    print("  [1] Crear Copia de Seguridad de Identidades y Configuración")
+    print("  [2] Restaurar Copia de Seguridad desde Archivo .tar.gz")
+    print("  [3] Ver Archivos de Identidad Actuales")
+    print("  [4] Volver")
+    
+    opt = input(f"\nOpción [1-4]: ").strip()
+    backup_dir = "/var/backups/reticulum-node"
+    os.makedirs(backup_dir, exist_ok=True)
+    
+    if opt == "1":
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        backup_file = os.path.join(backup_dir, f"rns_backup_{timestamp}.tar.gz")
+        dirs_to_backup = ["/root/.reticulum", "/root/.nomadnetwork", "/etc/reticulum-node"]
+        existing = [d for d in dirs_to_backup if os.path.exists(d)]
+        if existing:
+            cmd = ["tar", "-czf", backup_file] + existing
+            subprocess.run(cmd, check=True)
+            print(f"\n{C_GREEN}✓ Copia de seguridad creada con éxito en:{C_RESET}\n  {backup_file}")
+        else:
+            print(f"{C_RED}No se encontraron directorios de Reticulum para respaldar.{C_RESET}")
+        pause()
+    elif opt == "2":
+        file_path = input("Ingrese la ruta absoluta del archivo de respaldo (.tar.gz): ").strip()
+        if os.path.exists(file_path):
+            print(f"{C_YELLOW}Restaurando respaldo...{C_RESET}")
+            subprocess.run(["tar", "-xzf", file_path, "-C", "/"])
+            print(f"{C_GREEN}✓ Respaldo restaurado con éxito. Reinicie los servicios para aplicar.{C_RESET}")
+        else:
+            print(f"{C_RED}Archivo no encontrado.{C_RESET}")
+        pause()
+    elif opt == "3":
+        for path in ["/root/.reticulum", "/etc/reticulum-node"]:
+            if os.path.exists(path):
+                print(f"\nArchivos en {path}:")
+                for root, dirs, files in os.walk(path):
+                    for f in files:
+                        print(f"  • {os.path.join(root, f)}")
+        pause()
+
+def update_software():
+    clear_screen()
+    print_header()
+    print(f"{C_MAGENTA}{C_BOLD}=== 🔄 ACTUALIZACIÓN DEL SOFTWARE DESDE GITHUB ==={C_RESET}\n")
+    print("Esta opción descargará la versión más reciente del repositorio y actualizará")
+    print("los scripts, páginas y utilidades sin borrar sus claves criptográficas.")
+    
+    confirm = input(f"\n¿Desea continuar con la actualización? (s/N): ").strip().lower()
+    if confirm in ["s", "si", "y", "yes"]:
+        repo_dir = "/opt/reticulum-node"
+        if os.path.exists(os.path.join(repo_dir, ".git")):
+            subprocess.run(["git", "-C", repo_dir, "pull"])
+            # Re-run install.sh in update mode if available
+            inst_script = os.path.join(repo_dir, "install.sh")
+            if os.path.exists(inst_script):
+                subprocess.run(["bash", inst_script, "--update"])
+            print(f"{C_GREEN}✓ Software actualizado.{C_RESET}")
+        else:
+            print(f"{C_YELLOW}Instalación directa. Actualizando paquetes pip de Reticulum...{C_RESET}")
+            subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "rns", "lxmf", "nomadnet"])
+            print(f"{C_GREEN}✓ Paquetes de Reticulum actualizados.{C_RESET}")
+    pause()
+
+def main_menu():
+    while True:
+        clear_screen()
+        print_header()
+        
+        # Quick summary banner
+        if hardware_detect:
+            s = hardware_detect.get_system_stats()
+            t_str = f" | Temp: {s['cpu_temp']}°C" if s['cpu_temp'] else ""
+            print(f"{C_BOLD}SBC:{C_RESET} {s['model']} | {C_BOLD}RAM:{C_RESET} {s['ram_percent']}% | {C_BOLD}Uptime:{C_RESET} {s['uptime']}{t_str}\n")
+        
+        print(f"{C_BOLD}SELECCIONE UNA ACCIÓN:{C_RESET}")
+        print(f"  [{C_GREEN}1{C_RESET}] 📊 Ver Estado y Telemetría del Nodo (rnstatus)")
+        print(f"  [{C_GREEN}2{C_RESET}] ⚙️  Ejecutar Asistente de Configuración Paso a Paso (RNodes / Módems / Nombre)")
+        print(f"  [{C_GREEN}3{C_RESET}] 📜 Ver Registros y Logs del Sistema (rnsd, NomadNet, Watchdog)")
+        print(f"  [{C_GREEN}4{C_RESET}] 🛠️  Gestionar Servicios (Iniciar / Detener / Reiniciar)")
+        print(f"  [{C_GREEN}5{C_RESET}] 💾 Copias de Seguridad y Restauración de Identidad")
+        print(f"  [{C_GREEN}6{C_RESET}] 🔄 Actualizar Software del Nodo")
+        print(f"  [{C_GREEN}7{C_RESET}] 🔌 Reiniciar o Apagar el Nodo SBC")
+        print(f"  [{C_RED}0{C_RESET}] Salir a la Terminal")
+        
+        try:
+            choice = input(f"\n{C_BOLD}Ingrese opción [0-7]: {C_RESET}").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nSaliendo...")
+            break
+            
+        if choice == "1":
+            show_status()
+        elif choice == "2":
+            run_wizard()
+        elif choice == "3":
+            view_logs()
+        elif choice == "4":
+            manage_services()
+        elif choice == "5":
+            backup_restore_identity()
+        elif choice == "6":
+            update_software()
+        elif choice == "7":
+            clear_screen()
+            print_header()
+            print("  [1] Reiniciar SBC (Reboot)")
+            print("  [2] Apagar SBC (Power Off)")
+            print("  [3] Cancelar")
+            p_opt = input("\nOpción [1-3]: ").strip()
+            if p_opt == "1":
+                subprocess.run(["systemctl", "reboot"])
+            elif p_opt == "2":
+                subprocess.run(["systemctl", "poweroff"])
+        elif choice == "0":
+            print(f"\n{C_CYAN}Gracias por utilizar Reticulum Emergency Node - Cipropanama.org{C_RESET}\n")
+            break
+
+if __name__ == "__main__":
+    main_menu()

@@ -1,0 +1,10 @@
+[Unit]
+Description=Reticulum Emergency Node NomadNet Dynamic Telemetry Updater
+After=rnsd.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /opt/reticulum-node/scripts/update_telemetry.py
+StandardOutput=journal
+StandardError=journal

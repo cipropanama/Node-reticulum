@@ -1,0 +1,21 @@
+[Unit]
+Description=Reticulum Network Stack Daemon (rnsd)
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/rnsd --service
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=65535
+
+# Protecciones de seguridad básicas
+ProtectSystem=full
+ProtectHome=no
+
+[Install]
+WantedBy=multi-user.target
